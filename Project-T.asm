@@ -7,6 +7,7 @@
 
  .INCLUDE "m64adef.inc"
 
+
 .def	TMP	= R16
 .def	reg1 = r17
 .def	reg2 = r18
@@ -17,11 +18,11 @@
 .def	reg7 = r23
 .def	reg8 = r24
 .def	lcdbuf = r25
-						;1 й регістр помилок
-.def	gereg1 = r5		;0 - DS18B20 помилка CRC, 1 - DS18B20 нема відповіді від датчика
-						;2 - DS18B20 КЗ лінії датчика, 3 - (1) дані дійсні (без даного біту програми ігнорують температуру)
-						;4 - помилка звязку з еепром, 5 - помилка запису еепром, 6 - розряд батареї RTC
-						;7 - готовніть системи до роботи після запуску/перезапуску
+						;1 Г© Г°ГҐГЈВіГ±ГІГ° ГЇГ®Г¬ГЁГ«Г®ГЄ
+.def	gereg1 = r5		;0 - DS18B20 ГЇГ®Г¬ГЁГ«ГЄГ  CRC, 1 - DS18B20 Г­ГҐГ¬Г  ГўВіГ¤ГЇГ®ГўВіГ¤Ві ГўВіГ¤ Г¤Г ГІГ·ГЁГЄГ 
+						;2 - DS18B20 ГЉГ‡ Г«ВіГ­ВіВї Г¤Г ГІГ·ГЁГЄГ , 3 - (1) Г¤Г Г­Ві Г¤ВіГ©Г±Г­Ві (ГЎГҐГ§ Г¤Г Г­Г®ГЈГ® ГЎВіГІГі ГЇГ°Г®ГЈГ°Г Г¬ГЁ ВіГЈГ­Г®Г°ГіГѕГІГј ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°Гі)
+						;4 - ГЇГ®Г¬ГЁГ«ГЄГ  Г§ГўГїГ§ГЄГі Г§ ГҐГҐГЇГ°Г®Г¬, 5 - ГЇГ®Г¬ГЁГ«ГЄГ  Г§Г ГЇГЁГ±Гі ГҐГҐГЇГ°Г®Г¬, 6 - Г°Г®Г§Г°ГїГ¤ ГЎГ ГІГ Г°ГҐВї RTC
+						;7 - ГЈГ®ГІГ®ГўГ­ВіГІГј Г±ГЁГ±ГІГҐГ¬ГЁ Г¤Г® Г°Г®ГЎГ®ГІГЁ ГЇВіГ±Г«Гї Г§Г ГЇГіГ±ГЄГі/ГЇГҐГ°ГҐГ§Г ГЇГіГ±ГЄГі
 .equ	dscrce = 0
 .equ	dscome = 1		
 .equ	dspwdn = 2
@@ -30,26 +31,26 @@
 .equ	eewerr = 5
 .equ	rtcerr = 6
 .equ	sysrdy = 7
-						;2 й регістр помилок ()
+						;2 Г© Г°ГҐГЈВіГ±ГІГ° ГЇГ®Г¬ГЁГ«Г®ГЄ ()
 .def	gereg2 = r8
 
-.equ	triacer = 0		;0 - несправність симістора
-.equ	fanproter = 1	;1 - несправність кола захисту вентилятора (запобіжник/перегрів котла)
-.equ	tfaller = 6		;6 - попередження про падіння температури
-.equ	triseer = 7		;7 - аварійний ріст температури
+.equ	triacer = 0		;0 - Г­ГҐГ±ГЇГ°Г ГўГ­ВіГ±ГІГј Г±ГЁГ¬ВіГ±ГІГ®Г°Г 
+.equ	fanproter = 1	;1 - Г­ГҐГ±ГЇГ°Г ГўГ­ВіГ±ГІГј ГЄГ®Г«Г  Г§Г ГµГЁГ±ГІГі ГўГҐГ­ГІГЁГ«ГїГІГ®Г°Г  (Г§Г ГЇГ®ГЎВіГ¦Г­ГЁГЄ/ГЇГҐГ°ГҐГЈГ°ВіГў ГЄГ®ГІГ«Г )
+.equ	tfaller = 6		;6 - ГЇГ®ГЇГҐГ°ГҐГ¤Г¦ГҐГ­Г­Гї ГЇГ°Г® ГЇГ Г¤ВіГ­Г­Гї ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°ГЁ
+.equ	triseer = 7		;7 - Г ГўГ Г°ВіГ©Г­ГЁГ© Г°ВіГ±ГІ ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°ГЁ
 
-						;регістр подій
+						;Г°ГҐГЈВіГ±ГІГ° ГЇГ®Г¤ВіГ©
 .def	eventreg = r9
 
-.equ	tfrrestore = 0	;прапорець відновлення росту/падіння температури
-.equ	erractive = 1	;на даний момент є активна несправність/попередження (визначає точку переходу кнопок ОК і I+)
-.equ	gmodwork = 2	;перехід в режим розпалу котла
-.equ	gmodstby = 3	;перехід в режим гасіння котла
-.equ	passlock = 4	;блокування підбору пароля
-.equ	logclear = 5	;очищення логу температури
-.equ	poweron = 6		;старт приладу
+.equ	tfrrestore = 0	;ГЇГ°Г ГЇГ®Г°ГҐГ¶Гј ГўВіГ¤Г­Г®ГўГ«ГҐГ­Г­Гї Г°Г®Г±ГІГі/ГЇГ Г¤ВіГ­Г­Гї ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°ГЁ
+.equ	erractive = 1	;Г­Г  Г¤Г Г­ГЁГ© Г¬Г®Г¬ГҐГ­ГІ Вє Г ГЄГІГЁГўГ­Г  Г­ГҐГ±ГЇГ°Г ГўГ­ВіГ±ГІГј/ГЇГ®ГЇГҐГ°ГҐГ¤Г¦ГҐГ­Г­Гї (ГўГЁГ§Г­Г Г·Г Вє ГІГ®Г·ГЄГі ГЇГҐГ°ГҐГµГ®Г¤Гі ГЄГ­Г®ГЇГ®ГЄ ГЋГЉ Ві I+)
+.equ	gmodwork = 2	;ГЇГҐГ°ГҐГµВіГ¤ Гў Г°ГҐГ¦ГЁГ¬ Г°Г®Г§ГЇГ Г«Гі ГЄГ®ГІГ«Г 
+.equ	gmodstby = 3	;ГЇГҐГ°ГҐГµВіГ¤ Гў Г°ГҐГ¦ГЁГ¬ ГЈГ Г±ВіГ­Г­Гї ГЄГ®ГІГ«Г 
+.equ	passlock = 4	;ГЎГ«Г®ГЄГіГўГ Г­Г­Гї ГЇВіГ¤ГЎГ®Г°Гі ГЇГ Г°Г®Г«Гї
+.equ	logclear = 5	;Г®Г·ГЁГ№ГҐГ­Г­Гї Г«Г®ГЈГі ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°ГЁ
+.equ	poweron = 6		;Г±ГІГ Г°ГІ ГЇГ°ГЁГ«Г Г¤Гі
 
-.def	toutreg = r6	;Прапорці переривань слотів по таймауту
+.def	toutreg = r6	;ГЏГ°Г ГЇГ®Г°Г¶Ві ГЇГҐГ°ГҐГ°ГЁГўГ Г­Гј Г±Г«Г®ГІВіГў ГЇГ® ГІГ Г©Г¬Г ГіГІГі
 .equ	slot1tint = 0
 .equ	slot2tint = 1
 .equ	slot3tint = 2
@@ -59,7 +60,7 @@
 .equ	slot7tint = 6
 .equ	slot8tint = 7
 
-.def	toutreg2 = r7	;Прапорці переривань слотів по таймауту 2
+.def	toutreg2 = r7	;ГЏГ°Г ГЇГ®Г°Г¶Ві ГЇГҐГ°ГҐГ°ГЁГўГ Г­Гј Г±Г«Г®ГІВіГў ГЇГ® ГІГ Г©Г¬Г ГіГІГі 2
 .equ	slot9tint = 0
 .equ	slot10tint = 1
 .equ	slot11tint = 2
@@ -121,30 +122,30 @@ reset:	ldi tmp, low(ramend)
 		ldi tmp, 0b00000000
 		sts portg, tmp	
 		
-									;конфігураційні константи
+									;ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГ©Г­Ві ГЄГ®Г­Г±ГІГ Г­ГІГЁ
 	
 	;	ldi tmp, 0
-	;	mov gereg1, tmp			;конфігурація регістра помилок
-	;	mov gereg2, tmp			;конфігурація регістра помилок 2
-	;	mov eventreg, tmp		;конфігурація регістра подій
+	;	mov gereg1, tmp			;ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї Г°ГҐГЈВіГ±ГІГ°Г  ГЇГ®Г¬ГЁГ«Г®ГЄ
+	;	mov gereg2, tmp			;ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї Г°ГҐГЈВіГ±ГІГ°Г  ГЇГ®Г¬ГЁГ«Г®ГЄ 2
+	;	mov eventreg, tmp		;ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї Г°ГҐГЈВіГ±ГІГ°Г  ГЇГ®Г¤ВіГ©
 	;	ldi tmp, 0
 	;	sts lcdsit, tmp	
 	;;	ldi tmp, 0
 	;	sts menusit, tmp
-		ldi tmp, 0				;конфігурація програми контролю запуску
+		ldi tmp, 0				;ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї ГЇГ°Г®ГЈГ°Г Г¬ГЁ ГЄГ®Г­ГІГ°Г®Г«Гѕ Г§Г ГЇГіГ±ГЄГі
 		sts powerupstep, tmp
 		sts powerupcount, tmp
 		sts powerupevent, tmp		
-		call starttik ;старт системного таймера
+		call starttik ;Г±ГІГ Г°ГІ Г±ГЁГ±ГІГҐГ¬Г­Г®ГЈГ® ГІГ Г©Г¬ГҐГ°Г 
 		sei
 
-		ldi tmp, 2 ;через 200мс виклик підпрограми запуску
+		ldi tmp, 2 ;Г·ГҐГ°ГҐГ§ 200Г¬Г± ГўГЁГЄГ«ГЁГЄ ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬ГЁ Г§Г ГЇГіГ±ГЄГі
 		sts slotr2, tmp
 
 	;	call searchle	
 	;	call searchll		
 	;	call readsett				
-								;старт процесів
+								;Г±ГІГ Г°ГІ ГЇГ°Г®Г¶ГҐГ±ВіГў
 	;	call fasttmstart
 	;	call startkey
 	;	call startdind
@@ -159,57 +160,57 @@ reset:	ldi tmp, low(ramend)
 	;	call startfpcont
 		;	
 					
-	;	ldi tmp, 10;запуск групи секундних функцій
+	;	ldi tmp, 10;Г§Г ГЇГіГ±ГЄ ГЈГ°ГіГЇГЁ Г±ГҐГЄГіГ­Г¤Г­ГЁГµ ГґГіГ­ГЄГ¶ВіГ©
 	;	sts slotr12, tmp		
 
-	;	ldi tmp, 6;запуск групи функцій управління передньою панеллю/дисплеєм
+	;	ldi tmp, 6;Г§Г ГЇГіГ±ГЄ ГЈГ°ГіГЇГЁ ГґГіГ­ГЄГ¶ВіГ© ГіГЇГ°Г ГўГ«ВіГ­Г­Гї ГЇГҐГ°ГҐГ¤Г­ГјГ®Гѕ ГЇГ Г­ГҐГ«Г«Гѕ/Г¤ГЁГ±ГЇГ«ГҐВєГ¬
 	;	sts slotr11, tmp		
 
-	;	ldi tmp, 5;запуск підпрограми управління насосом
+	;	ldi tmp, 5;Г§Г ГЇГіГ±ГЄ ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬ГЁ ГіГЇГ°Г ГўГ«ВіГ­Г­Гї Г­Г Г±Г®Г±Г®Г¬
 	;	sts slotr7, tmp
 
-	;	ldi tmp, 10;запуск підпрограми управління вентилятором
+	;	ldi tmp, 10;Г§Г ГЇГіГ±ГЄ ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬ГЁ ГіГЇГ°Г ГўГ«ВіГ­Г­Гї ГўГҐГ­ГІГЁГ«ГїГІГ®Г°Г®Г¬
 	;	sts slotr6, tmp
 
-	;	ldi tmp, 7;запуск підпрограми контролю порогів
+	;	ldi tmp, 7;Г§Г ГЇГіГ±ГЄ ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬ГЁ ГЄГ®Г­ГІГ°Г®Г«Гѕ ГЇГ®Г°Г®ГЈВіГў
 	;	sts slotr8, tmp
 
-	;	ldi tmp, 12;запуск підпрограми запису логу подій
+	;	ldi tmp, 12;Г§Г ГЇГіГ±ГЄ ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬ГЁ Г§Г ГЇГЁГ±Гі Г«Г®ГЈГі ГЇГ®Г¤ВіГ©
 	;	sts slotr10, tmp
 			
 ;_________________________________________________ SYSDISP ______________________________________________________________
-								;Диспетчер виконання основного циклу
-sysdisp:bst toutreg, slot1tint	;слот 1	
+								;Г„ГЁГ±ГЇГҐГІГ·ГҐГ° ГўГЁГЄГ®Г­Г Г­Г­Гї Г®Г±Г­Г®ГўГ­Г®ГЈГ® Г¶ГЁГЄГ«Гі
+sysdisp:bst toutreg, slot1tint	;Г±Г«Г®ГІ 1	
 		brts sysdisp1_1
 		rjmp sysdisp2
 sysdisp1_1:rcall slot1
 		clt
 		bld toutreg, slot1tint
 		rjmp sysdisp
-sysdisp2:bst toutreg, slot2tint	;слот 2
+sysdisp2:bst toutreg, slot2tint	;Г±Г«Г®ГІ 2
 		brts sysdisp21
 		rjmp sysdisp3
 sysdisp21:rcall slot2
 		clt
 		bld toutreg, slot2tint
 		rjmp sysdisp		
-sysdisp3:bst toutreg, slot3tint	;слот 3
+sysdisp3:bst toutreg, slot3tint	;Г±Г«Г®ГІ 3
 		brts sysdisp31
-		bst gereg1, sysrdy ;якщо не встановлено прапорець готовності системи виконуються тільки перші 3 слоти
+		bst gereg1, sysrdy ;ГїГЄГ№Г® Г­ГҐ ГўГ±ГІГ Г­Г®ГўГ«ГҐГ­Г® ГЇГ°Г ГЇГ®Г°ГҐГ¶Гј ГЈГ®ГІГ®ГўГ­Г®Г±ГІВі Г±ГЁГ±ГІГҐГ¬ГЁ ГўГЁГЄГ®Г­ГіГѕГІГјГ±Гї ГІВіГ«ГјГЄГЁ ГЇГҐГ°ГёВі 3 Г±Г«Г®ГІГЁ
 		brtc sysdisp
 		rjmp sysdisp4
 sysdisp31:rcall slot3
 		clt
 		bld toutreg, slot3tint
 		rjmp sysdisp		
-sysdisp4:bst toutreg, slot4tint	;слот 4
+sysdisp4:bst toutreg, slot4tint	;Г±Г«Г®ГІ 4
 		brts sysdisp41
 		rjmp sysdisp5
 sysdisp41:rcall slot4
 		clt
 		bld toutreg, slot4tint
 		rjmp sysdisp		
-sysdisp5:bst toutreg, slot5tint	;слот 5		меню
+sysdisp5:bst toutreg, slot5tint	;Г±Г«Г®ГІ 5		Г¬ГҐГ­Гѕ
 		brts sysdisp51
 		lds tmp, key
 		cpi tmp, 0
@@ -221,21 +222,21 @@ sysdisp51:rcall slot5
 		clt
 		bld toutreg, slot5tint
 		rjmp sysdisp		
-sysdisp6:bst toutreg, slot6tint	;слот 6
+sysdisp6:bst toutreg, slot6tint	;Г±Г«Г®ГІ 6
 		brts sysdisp61
 		rjmp sysdisp7
 sysdisp61:rcall slot6
 		clt
 		bld toutreg, slot6tint
 		rjmp sysdisp		
-sysdisp7:bst toutreg, slot7tint	;слот 7
+sysdisp7:bst toutreg, slot7tint	;Г±Г«Г®ГІ 7
 		brts sysdisp71
 		rjmp sysdisp8
 sysdisp71:rcall slot7
 		clt
 		bld toutreg, slot7tint
 		rjmp sysdisp		
-sysdisp8:bst toutreg, slot8tint	;слот 8
+sysdisp8:bst toutreg, slot8tint	;Г±Г«Г®ГІ 8
 		brts sysdisp81
 		rjmp sysdisp9
 sysdisp81:rcall slot8
@@ -243,7 +244,7 @@ sysdisp81:rcall slot8
 		bld toutreg, slot8tint
 		rjmp sysdisp
 
-sysdisp9:bst toutreg2, slot9tint	;слот 9
+sysdisp9:bst toutreg2, slot9tint	;Г±Г«Г®ГІ 9
 		brts sysdisp91
 		rjmp sysdisp10
 sysdisp91:rcall slot9
@@ -251,7 +252,7 @@ sysdisp91:rcall slot9
 		bld toutreg2, slot9tint
 		rjmp sysdisp
 
-sysdisp10:bst toutreg2, slot10tint	;слот 10
+sysdisp10:bst toutreg2, slot10tint	;Г±Г«Г®ГІ 10
 		brts sysdisp101
 		rjmp sysdisp11
 sysdisp101:rcall slot10
@@ -259,7 +260,7 @@ sysdisp101:rcall slot10
 		bld toutreg2, slot10tint
 		rjmp sysdisp
 
-sysdisp11:bst toutreg2, slot11tint	;слот 11
+sysdisp11:bst toutreg2, slot11tint	;Г±Г«Г®ГІ 11
 		brts sysdisp111
 		rjmp sysdisp12
 sysdisp111:rcall slot11
@@ -267,7 +268,7 @@ sysdisp111:rcall slot11
 		bld toutreg2, slot11tint
 		rjmp sysdisp
 
-sysdisp12:bst toutreg2, slot12tint	;слот 12
+sysdisp12:bst toutreg2, slot12tint	;Г±Г«Г®ГІ 12
 		brts sysdisp121
 		rjmp sysdisp
 sysdisp121:rcall slot12
@@ -279,22 +280,22 @@ sysdisp121:rcall slot12
 .INCLUDE "menu.inc"
 .INCLUDE "lcd.inc"
 
-;_________________________________________ переривання пропажі живлення ___________________________________________________________________________
+;_________________________________________ ГЇГҐГ°ГҐГ°ГЁГўГ Г­Г­Гї ГЇГ°Г®ГЇГ Г¦Ві Г¦ГЁГўГ«ГҐГ­Г­Гї ___________________________________________________________________________
 
 powerdnint:push tmp		
-		call stoplcd	;негайне відключення споживачів
+		call stoplcd	;Г­ГҐГЈГ Г©Г­ГҐ ГўВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Гї Г±ГЇГ®Г¦ГЁГўГ Г·ВіГў
 		call lcdbloff
 		call stopdind
 		call beepstop	
 		call stopdscomm
 		set
-		bld toutreg, slot3tint	;встановлення прапорця для виклику підрограми завершення відключення
+		bld toutreg, slot3tint	;ГўГ±ГІГ Г­Г®ГўГ«ГҐГ­Г­Гї ГЇГ°Г ГЇГ®Г°Г¶Гї Г¤Г«Гї ГўГЁГЄГ«ГЁГЄГі ГЇВіГ¤Г°Г®ГЈГ°Г Г¬ГЁ Г§Г ГўГҐГ°ГёГҐГ­Г­Гї ГўВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Гї
 		ldi tmp, 0b00000000
 		out eimsk, tmp
 		pop tmp
 		reti
 
-fpowerdnintst:ldi tmp, 0b00110000 ;дозвіл переривань
+fpowerdnintst:ldi tmp, 0b00110000 ;Г¤Г®Г§ГўВіГ« ГЇГҐГ°ГҐГ°ГЁГўГ Г­Гј
 		out eicrb, tmp
 		ldi tmp, 0b01000000
 		out eifr, tmp
@@ -305,7 +306,7 @@ fpowerdnintst:ldi tmp, 0b00110000 ;дозвіл переривань
 .equ	powerdncount = $263
 ;_________________________________________________ SYSTIK ______________________________________________________________
 
-tiktimer:push tmp			;Переривання таймера 1
+tiktimer:push tmp			;ГЏГҐГ°ГҐГ°ГЁГўГ Г­Г­Гї ГІГ Г©Г¬ГҐГ°Г  1
 		in tmp, sreg
 		push tmp
 		push reg1
@@ -318,7 +319,7 @@ tiktimer:push tmp			;Переривання таймера 1
 		out tcnt1h, tmp
 		ldi tmp, low(tiktime)
 		out tcnt1l, tmp
-		ldi xh, high(slotr1) ; Диспетчер часових інтервалів
+		ldi xh, high(slotr1) ; Г„ГЁГ±ГЇГҐГІГ·ГҐГ° Г·Г Г±Г®ГўГЁГµ ВіГ­ГІГҐГ°ГўГ Г«ВіГў
 		ldi xl, low(slotr1)
 		ldi reg1, 0
 tiktim2:ld reg2, x
@@ -328,8 +329,8 @@ tiktim2:ld reg2, x
 		cpi reg2, 0
 		breq tiktim3
 		rjmp tiktim1
-tiktim3:ldi zh, high(tiktimxx) ; початковий адрес мітки множиться на номер слота і отримується адрес
-		ldi zl, low(tiktimxx)	;потрібної інструкції BLD (встановлення потрібного біта переривання)
+tiktim3:ldi zh, high(tiktimxx) ; ГЇГ®Г·Г ГІГЄГ®ГўГЁГ© Г Г¤Г°ГҐГ± Г¬ВіГІГЄГЁ Г¬Г­Г®Г¦ГЁГІГјГ±Гї Г­Г  Г­Г®Г¬ГҐГ° Г±Г«Г®ГІГ  Ві Г®ГІГ°ГЁГ¬ГіВєГІГјГ±Гї Г Г¤Г°ГҐГ±
+		ldi zl, low(tiktimxx)	;ГЇГ®ГІГ°ВіГЎГ­Г®Вї ВіГ­Г±ГІГ°ГіГЄГ¶ВіВї BLD (ГўГ±ГІГ Г­Г®ГўГ«ГҐГ­Г­Гї ГЇГ®ГІГ°ВіГЎГ­Г®ГЈГ® ГЎВіГІГ  ГЇГҐГ°ГҐГ°ГЁГўГ Г­Г­Гї)
 		mov tmp, reg1		
 		lsl tmp		
 		add zl, tmp
@@ -384,7 +385,7 @@ tiktim1:st x+, reg2
 		pop tmp
 		reti
 
-starttik:push reg1	;запуск системного таймера
+starttik:push reg1	;Г§Г ГЇГіГ±ГЄ Г±ГЁГ±ГІГҐГ¬Г­Г®ГЈГ® ГІГ Г©Г¬ГҐГ°Г 
 		push zl
 		push zh
 		ldi tmp, high(tiktime)
@@ -428,7 +429,7 @@ starttik1:st z+, tmp
 .equ	slotr15 = $21e
 .equ	slotr16 = $21f
 ;_________________________________________________ Memory manager ____________________________________________________________________________
-readsett:push reg1	;завантаження налаштувань з пмяті
+readsett:push reg1	;Г§Г ГўГ Г­ГІГ Г¦ГҐГ­Г­Гї Г­Г Г«Г ГёГІГіГўГ Г­Гј Г§ ГЇГ¬ГїГІВі
 		push zl
 		push zh
 		ldi zh, high(fantoff)
@@ -444,8 +445,8 @@ readsett2:sts wordadrl, reg1
 		brsh readsett1
 		inc reg1
 		rjmp readsett2
-readsett1:lds tmp, soundmod;в якості виключення перенос біту викл. звуку в спец регістр BEEPFREG
-		com tmp;інверсія біта
+readsett1:lds tmp, soundmod;Гў ГїГЄГ®Г±ГІВі ГўГЁГЄГ«ГѕГ·ГҐГ­Г­Гї ГЇГҐГ°ГҐГ­Г®Г± ГЎВіГІГі ГўГЁГЄГ«. Г§ГўГіГЄГі Гў Г±ГЇГҐГ¶ Г°ГҐГЈВіГ±ГІГ° BEEPFREG
+		com tmp;ВіГ­ГўГҐГ°Г±ВіГї ГЎВіГІГ 
 		bst tmp, 0
 		lds tmp, beepfreg
 		bld tmp, 0
@@ -455,14 +456,14 @@ readsett1:lds tmp, soundmod;в якості виключення перенос біту викл. звуку в спец 
 		pop reg1
 		ret
 
-clearevent:push reg1		;підпрограма очищення памяті подій
+clearevent:push reg1		;ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬Г  Г®Г·ГЁГ№ГҐГ­Г­Гї ГЇГ Г¬ГїГІВі ГЇГ®Г¤ВіГ©
 		push reg2
 		push reg3
 		push reg4
 		push r0
 		push r1
-		ldi tmp, 0		;збереження в еепром номера останньої комірки старого циклу
-		sts wordadrh, tmp ;ця комірка буде стартовою для нового циклу (з неї програма при старті починає сканування)
+		ldi tmp, 0		;Г§ГЎГҐГ°ГҐГ¦ГҐГ­Г­Гї Гў ГҐГҐГЇГ°Г®Г¬ Г­Г®Г¬ГҐГ°Г  Г®Г±ГІГ Г­Г­ГјГ®Вї ГЄГ®Г¬ВіГ°ГЄГЁ Г±ГІГ Г°Г®ГЈГ® Г¶ГЁГЄГ«Гі
+		sts wordadrh, tmp ;Г¶Гї ГЄГ®Г¬ВіГ°ГЄГ  ГЎГіГ¤ГҐ Г±ГІГ Г°ГІГ®ГўГ®Гѕ Г¤Г«Гї Г­Г®ГўГ®ГЈГ® Г¶ГЁГЄГ«Гі (Г§ Г­ГҐВї ГЇГ°Г®ГЈГ°Г Г¬Г  ГЇГ°ГЁ Г±ГІГ Г°ГІВі ГЇГ®Г·ГЁГ­Г Вє Г±ГЄГ Г­ГіГўГ Г­Г­Гї)
 		ldi tmp, eelastevenuml
 		sts wordadrl, tmp
 		lds tmp, lastevnuml
@@ -473,7 +474,7 @@ clearevent:push reg1		;підпрограма очищення памяті подій
 		lds tmp, lastevnumh
 		sts i2cdata, tmp
 		call eewrite
-		lds tmp, timeyear	;підготовка данних першої події
+		lds tmp, timeyear	;ГЇВіГ¤ГЈГ®ГІГ®ГўГЄГ  Г¤Г Г­Г­ГЁГµ ГЇГҐГ°ГёГ®Вї ГЇГ®Г¤ВіВї
 		sts memdata5, tmp
 		lds tmp, timemonth
 		sts memdata4, tmp
@@ -483,9 +484,9 @@ clearevent:push reg1		;підпрограма очищення памяті подій
 		sts memdata2, tmp
 		lds tmp, timehour
 		sts memdata1, tmp
-		ldi tmp, 6		;код події
+		ldi tmp, 6		;ГЄГ®Г¤ ГЇГ®Г¤ВіВї
 		sts memdata6, tmp
-		lds reg1, lastevckll	;циклічний номер старого логу інкрементаваний на 3 буде початковим для нового
+		lds reg1, lastevckll	;Г¶ГЁГЄГ«ВіГ·Г­ГЁГ© Г­Г®Г¬ГҐГ° Г±ГІГ Г°Г®ГЈГ® Г«Г®ГЈГі ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІГ ГўГ Г­ГЁГ© Г­Г  3 ГЎГіГ¤ГҐ ГЇГ®Г·Г ГІГЄГ®ГўГЁГ¬ Г¤Г«Гї Г­Г®ГўГ®ГЈГ®
 		lds reg2, lastevcklh
 		ldi tmp, 3
 		add reg1, tmp
@@ -497,21 +498,21 @@ clearevent:push reg1		;підпрограма очищення памяті подій
 		sts lastevcklh, reg2
 		lds reg1, lastevnuml
 		lds reg2, lastevnumh
-		ldi reg4, 0		;лічильник записаних слотів - буде записано 2 слоти з однаковими данними і циклічним номером
-clearevent4:ldi tmp, 9		;обрахування абсолютного адреса в памяті, де 9 розмір одного слота
+		ldi reg4, 0		;Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Г§Г ГЇГЁГ±Г Г­ГЁГµ Г±Г«Г®ГІВіГў - ГЎГіГ¤ГҐ Г§Г ГЇГЁГ±Г Г­Г® 2 Г±Г«Г®ГІГЁ Г§ Г®Г¤Г­Г ГЄГ®ГўГЁГ¬ГЁ Г¤Г Г­Г­ГЁГ¬ГЁ Ві Г¶ГЁГЄГ«ВіГ·Г­ГЁГ¬ Г­Г®Г¬ГҐГ°Г®Г¬
+clearevent4:ldi tmp, 9		;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г ГЎГ±Г®Г«ГѕГІГ­Г®ГЈГ® Г Г¤Г°ГҐГ±Г  Гў ГЇГ Г¬ГїГІВі, Г¤ГҐ 9 Г°Г®Г§Г¬ВіГ° Г®Г¤Г­Г®ГЈГ® Г±Г«Г®ГІГ 
 		mul reg2, tmp
 		mov reg2, r0
 		mul reg1, tmp
 		mov reg1, r0
 		add reg2, r1
-		ldi tmp, 200	;додавання зміщення
+		ldi tmp, 200	;Г¤Г®Г¤Г ГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		add reg1, tmp
 		ldi tmp, 0
 		adc reg2, tmp					
-		ldi reg3, 0		;лічильник записаних байтів
+		ldi reg3, 0		;Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Г§Г ГЇГЁГ±Г Г­ГЁГµ ГЎГ Г©ГІВіГў
 		ldi zh, high(memdata1)
 		ldi zl, low(memdata1)				
-clearevent2:sts wordadrl, reg1	;запис в память 9 байтів, щоб сформувати 1й слот нового циклу і записати подію стирання
+clearevent2:sts wordadrl, reg1	;Г§Г ГЇГЁГ± Гў ГЇГ Г¬ГїГІГј 9 ГЎГ Г©ГІВіГў, Г№Г®ГЎ Г±ГґГ®Г°Г¬ГіГўГ ГІГЁ 1Г© Г±Г«Г®ГІ Г­Г®ГўГ®ГЈГ® Г¶ГЁГЄГ«Гі Ві Г§Г ГЇГЁГ±Г ГІГЁ ГЇГ®Г¤ВіГѕ Г±ГІГЁГ°Г Г­Г­Гї
 		sts wordadrh, reg2
 		ld tmp, z+
 		sts i2cdata, tmp
@@ -527,7 +528,7 @@ clearevent2:sts wordadrl, reg1	;запис в память 9 байтів, щоб сформувати 1й слот 
 clearevent3:inc reg4
 		cpi reg4, 2
 		brsh clearevent5
-		lds reg1, lastevnuml	;інкремент номера слота і повторний запис тих самих данних (в рам залишається старий номер)
+		lds reg1, lastevnuml	;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г­Г®Г¬ГҐГ°Г  Г±Г«Г®ГІГ  Ві ГЇГ®ГўГІГ®Г°Г­ГЁГ© Г§Г ГЇГЁГ± ГІГЁГµ Г±Г Г¬ГЁГµ Г¤Г Г­Г­ГЁГµ (Гў Г°Г Г¬ Г§Г Г«ГЁГёГ ВєГІГјГ±Гї Г±ГІГ Г°ГЁГ© Г­Г®Г¬ГҐГ°)
 		lds reg2, lastevnumh
 		ldi tmp, 1
 		add reg1, tmp
@@ -542,14 +543,14 @@ clearevent5:pop r1
 		pop reg1
 		ret
 				
-clearlog:push reg1		;підпрограма очищення логу температури
+clearlog:push reg1		;ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬Г  Г®Г·ГЁГ№ГҐГ­Г­Гї Г«Г®ГЈГі ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°ГЁ
 		push reg2
 		push reg3
 		push reg4
 		push r0
 		push r1
-		ldi tmp, 0		;збереження в еепром номера останньої комірки старого циклу
-		sts wordadrh, tmp ;ця комірка буде стартовою для нового циклу (з неї програма при старті починає сканування)
+		ldi tmp, 0		;Г§ГЎГҐГ°ГҐГ¦ГҐГ­Г­Гї Гў ГҐГҐГЇГ°Г®Г¬ Г­Г®Г¬ГҐГ°Г  Г®Г±ГІГ Г­Г­ГјГ®Вї ГЄГ®Г¬ВіГ°ГЄГЁ Г±ГІГ Г°Г®ГЈГ® Г¶ГЁГЄГ«Гі
+		sts wordadrh, tmp ;Г¶Гї ГЄГ®Г¬ВіГ°ГЄГ  ГЎГіГ¤ГҐ Г±ГІГ Г°ГІГ®ГўГ®Гѕ Г¤Г«Гї Г­Г®ГўГ®ГЈГ® Г¶ГЁГЄГ«Гі (Г§ Г­ГҐВї ГЇГ°Г®ГЈГ°Г Г¬Г  ГЇГ°ГЁ Г±ГІГ Г°ГІВі ГЇГ®Г·ГЁГ­Г Вє Г±ГЄГ Г­ГіГўГ Г­Г­Гї)
 		ldi tmp, eelastlognuml
 		sts wordadrl, tmp
 		lds tmp, lastlognuml
@@ -560,7 +561,7 @@ clearlog:push reg1		;підпрограма очищення логу температури
 		lds tmp, lastlognumh
 		sts i2cdata, tmp
 		call eewrite
-		lds tmp, timeyear	;підготовка данних першої події
+		lds tmp, timeyear	;ГЇВіГ¤ГЈГ®ГІГ®ГўГЄГ  Г¤Г Г­Г­ГЁГµ ГЇГҐГ°ГёГ®Вї ГЇГ®Г¤ВіВї
 		sts memdata4, tmp
 		lds tmp, timemonth
 		sts memdata3, tmp
@@ -573,8 +574,8 @@ clearlog:push reg1		;підпрограма очищення логу температури
 		ldi tmp, $ff
 		rjmp clearlog02
 clearlog01:lds tmp, tempuni
-clearlog02:sts memdata5, tmp ;темература, якщо недоступно то FF (-)
-		lds reg1, lastlogckll	;циклічний номер старого логу інкрементаваний на 3 буде початковим для нового
+clearlog02:sts memdata5, tmp ;ГІГҐГ¬ГҐГ°Г ГІГіГ°Г , ГїГЄГ№Г® Г­ГҐГ¤Г®Г±ГІГіГЇГ­Г® ГІГ® FF (-)
+		lds reg1, lastlogckll	;Г¶ГЁГЄГ«ВіГ·Г­ГЁГ© Г­Г®Г¬ГҐГ° Г±ГІГ Г°Г®ГЈГ® Г«Г®ГЈГі ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІГ ГўГ Г­ГЁГ© Г­Г  3 ГЎГіГ¤ГҐ ГЇГ®Г·Г ГІГЄГ®ГўГЁГ¬ Г¤Г«Гї Г­Г®ГўГ®ГЈГ®
 		lds reg2, lastlogcklh
 		ldi tmp, 3
 		add reg1, tmp
@@ -586,21 +587,21 @@ clearlog02:sts memdata5, tmp ;темература, якщо недоступно то FF (-)
 		sts lastlogcklh, reg2
 		lds reg1, lastlognuml
 		lds reg2, lastlognumh
-		ldi reg4, 0		;лічильник записаних слотів - буде записано 2 слоти з однаковими данними і циклічним номером
-clearlog4:ldi tmp, 7	;обрахування абсолютного адреса в памяті, де 7 розмір одного слота
+		ldi reg4, 0		;Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Г§Г ГЇГЁГ±Г Г­ГЁГµ Г±Г«Г®ГІВіГў - ГЎГіГ¤ГҐ Г§Г ГЇГЁГ±Г Г­Г® 2 Г±Г«Г®ГІГЁ Г§ Г®Г¤Г­Г ГЄГ®ГўГЁГ¬ГЁ Г¤Г Г­Г­ГЁГ¬ГЁ Ві Г¶ГЁГЄГ«ВіГ·Г­ГЁГ¬ Г­Г®Г¬ГҐГ°Г®Г¬
+clearlog4:ldi tmp, 7	;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г ГЎГ±Г®Г«ГѕГІГ­Г®ГЈГ® Г Г¤Г°ГҐГ±Г  Гў ГЇГ Г¬ГїГІВі, Г¤ГҐ 7 Г°Г®Г§Г¬ВіГ° Г®Г¤Г­Г®ГЈГ® Г±Г«Г®ГІГ 
 		mul reg2, tmp
 		mov reg2, r0
 		mul reg1, tmp
 		mov reg1, r0
 		add reg2, r1
-		ldi tmp, low(4720)	;додавання зміщення
+		ldi tmp, low(4720)	;Г¤Г®Г¤Г ГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		add reg1, tmp
 		ldi tmp, high(4720)
 		adc reg2, tmp					
-		ldi reg3, 0		;лічильник записаних байтів
+		ldi reg3, 0		;Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Г§Г ГЇГЁГ±Г Г­ГЁГµ ГЎГ Г©ГІВіГў
 		ldi zh, high(memdata1)
 		ldi zl, low(memdata1)				
-clearlog2:sts wordadrl, reg1	;запис в память 7 байтів, щоб сформувати 1й слот нового циклу і записати подію стирання
+clearlog2:sts wordadrl, reg1	;Г§Г ГЇГЁГ± Гў ГЇГ Г¬ГїГІГј 7 ГЎГ Г©ГІВіГў, Г№Г®ГЎ Г±ГґГ®Г°Г¬ГіГўГ ГІГЁ 1Г© Г±Г«Г®ГІ Г­Г®ГўГ®ГЈГ® Г¶ГЁГЄГ«Гі Ві Г§Г ГЇГЁГ±Г ГІГЁ ГЇГ®Г¤ВіГѕ Г±ГІГЁГ°Г Г­Г­Гї
 		sts wordadrh, reg2
 		ld tmp, z+
 		sts i2cdata, tmp
@@ -616,7 +617,7 @@ clearlog2:sts wordadrl, reg1	;запис в память 7 байтів, щоб сформувати 1й слот но
 clearlog3:inc reg4
 		cpi reg4, 2
 		brsh clearlog5
-		lds reg1, lastlognuml	;інкремент номера слота і повторний запис тих самих данних (в рам залишається старий номер)
+		lds reg1, lastlognuml	;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г­Г®Г¬ГҐГ°Г  Г±Г«Г®ГІГ  Ві ГЇГ®ГўГІГ®Г°Г­ГЁГ© Г§Г ГЇГЁГ± ГІГЁГµ Г±Г Г¬ГЁГµ Г¤Г Г­Г­ГЁГµ (Гў Г°Г Г¬ Г§Г Г«ГЁГёГ ВєГІГјГ±Гї Г±ГІГ Г°ГЁГ© Г­Г®Г¬ГҐГ°)
 		lds reg2, lastlognumh
 		ldi tmp, 1
 		add reg1, tmp
@@ -631,7 +632,7 @@ clearlog5:pop r1
 		pop reg1
 		ret
 		
-clearsett:push reg1		;підпрограма скидання налаштувань на завод		
+clearsett:push reg1		;ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬Г  Г±ГЄГЁГ¤Г Г­Г­Гї Г­Г Г«Г ГёГІГіГўГ Г­Гј Г­Г  Г§Г ГўГ®Г¤		
 		push zh
 		push zl
 		ldi reg1, 0		
@@ -653,12 +654,12 @@ clearsett1:sts wordadrl, reg1
 		pop reg1
 		ret
 
-dbsett:								;набір заводських налаштувань
+dbsett:								;Г­Г ГЎВіГ° Г§Г ГўГ®Г¤Г±ГјГЄГЁГµ Г­Г Г«Г ГёГІГіГўГ Г­Гј
 .db		10,162,247,75,70,75,5,0,1,0	;0-9
 .db		1,60,45,1,1,0,5,90,1,0		;10-19
 .db		5,65,0,15,7,4,2,5,5,7	;20-29
 
-fullerase:push reg1		;підпрограма повної очистки памяті
+fullerase:push reg1		;ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬Г  ГЇГ®ГўГ­Г®Вї Г®Г·ГЁГ±ГІГЄГЁ ГЇГ Г¬ГїГІВі
 		push zh
 		push zl
 		ldi reg1, 0		
@@ -680,20 +681,20 @@ fullerase1:sts wordadrl, reg1
 		pop reg1
 		ret
 
-dbfullerase:						;набір заводських налаштувань
+dbfullerase:						;Г­Г ГЎВіГ° Г§Г ГўГ®Г¤Г±ГјГЄГЁГµ Г­Г Г«Г ГёГІГіГўГ Г­Гј
 .db		10,162,247,75,70,75,5,0,1,0	;0-9
 .db		1,60,45,1,1,0,5,90,1,0		;10-19
 .db		5,65,0,15,7,4,2,5,5,7	;20-29
 .db		0,0,0,0,0,0,0,0,0,1		;30-39	
 .db		0,1,0,0		;40-43	
 
-searchle:push reg1	;пошук номера останньої записаної події
+searchle:push reg1	;ГЇГ®ГёГіГЄ Г­Г®Г¬ГҐГ°Г  Г®Г±ГІГ Г­Г­ГјГ®Вї Г§Г ГЇГЁГ±Г Г­Г®Вї ГЇГ®Г¤ВіВї
 		push reg2
 		push reg3
 		push reg4
 		push reg5
 		push reg6
-		ldi tmp, 0		;завантаження номера слота з якого почати сканування
+		ldi tmp, 0		;Г§Г ГўГ Г­ГІГ Г¦ГҐГ­Г­Гї Г­Г®Г¬ГҐГ°Г  Г±Г«Г®ГІГ  Г§ ГїГЄГ®ГЈГ® ГЇГ®Г·Г ГІГЁ Г±ГЄГ Г­ГіГўГ Г­Г­Гї
 		sts wordadrh, tmp 
 		ldi tmp, eelastevenuml
 		sts wordadrl, tmp		
@@ -703,7 +704,7 @@ searchle:push reg1	;пошук номера останньої записаної події
 		sts wordadrl, tmp		
 		call eeread
 		lds reg2, i2cdata
-		cpi reg2, high(501);перевірка чи більше 500б якщо так то встановлюється 1
+		cpi reg2, high(501);ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГЎВіГ«ГјГёГҐ 500ГЎ ГїГЄГ№Г® ГІГ ГЄ ГІГ® ГўГ±ГІГ Г­Г®ГўГ«ГѕВєГІГјГ±Гї 1
 		brlo searchle0
 		cpi reg1, low(501)
 		brlo searchle0
@@ -712,40 +713,40 @@ searchle:push reg1	;пошук номера останньої записаної події
 searchle0:sts lastevnuml, reg1
 		sts lastevnumh, reg2
 		ldi tmp, 0
-		sts evdispl, tmp	;зміщення задається 0
+		sts evdispl, tmp	;Г§Г¬ВіГ№ГҐГ­Г­Гї Г§Г Г¤Г ВєГІГјГ±Гї 0
 		sts evdisph, tmp
-		rcall readevent		;зчитується запис з №1
-		lds reg3, memdata9	;завантажуються значення lastevckll, як опорне
-		lds reg4, memdata8	;завантажуються значення lastevcklh, як опорне
-searchle3:mov reg5, reg1	;номер слота копіюється
+		rcall readevent		;Г§Г·ГЁГІГіВєГІГјГ±Гї Г§Г ГЇГЁГ± Г§ В№1
+		lds reg3, memdata9	;Г§Г ГўГ Г­ГІГ Г¦ГіГѕГІГјГ±Гї Г§Г­Г Г·ГҐГ­Г­Гї lastevckll, ГїГЄ Г®ГЇГ®Г°Г­ГҐ
+		lds reg4, memdata8	;Г§Г ГўГ Г­ГІГ Г¦ГіГѕГІГјГ±Гї Г§Г­Г Г·ГҐГ­Г­Гї lastevcklh, ГїГЄ Г®ГЇГ®Г°Г­ГҐ
+searchle3:mov reg5, reg1	;Г­Г®Г¬ГҐГ° Г±Г«Г®ГІГ  ГЄГ®ГЇВіГѕВєГІГјГ±Гї
 		mov reg6, reg2
 		ldi tmp, 1
-		add reg5, tmp		;інкрементується номер слота
+		add reg5, tmp		;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІГіВєГІГјГ±Гї Г­Г®Г¬ГҐГ° Г±Г«Г®ГІГ 
 		ldi tmp, 0
 		adc reg6, tmp		
-		cpi reg6, high(501)	;перевірка чи номер слота досягнув кінця буфера
+		cpi reg6, high(501)	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­Г®Г¬ГҐГ° Г±Г«Г®ГІГ  Г¤Г®Г±ГїГЈГ­ГіГў ГЄВіГ­Г¶Гї ГЎГіГґГҐГ°Г 
 		brlo searchle1
 		cpi reg5, low(501)
 		brlo searchle1
-		ldi reg5, 1			;якщо так то завантажується №1
+		ldi reg5, 1			;ГїГЄГ№Г® ГІГ ГЄ ГІГ® Г§Г ГўГ Г­ГІГ Г¦ГіВєГІГјГ±Гї В№1
 		ldi reg6, 0
 searchle1:sts lastevnuml, reg5
 		sts lastevnumh, reg6
 		rcall readevent
-		lds reg5, memdata9	;зчитується циклічний номер наступного слота
+		lds reg5, memdata9	;Г§Г·ГЁГІГіВєГІГјГ±Гї Г¶ГЁГЄГ«ВіГ·Г­ГЁГ© Г­Г®Г¬ГҐГ° Г­Г Г±ГІГіГЇГ­Г®ГЈГ® Г±Г«Г®ГІГ 
 		lds reg6, memdata8
-		subi reg5, 1		;зменшується на 1
+		subi reg5, 1		;Г§Г¬ГҐГ­ГёГіВєГІГјГ±Гї Г­Г  1
 		sbci reg6, 0
-		cp reg5, reg3		;порівнюється з номером попереднього слота
+		cp reg5, reg3		;ГЇГ®Г°ВіГўГ­ГѕВєГІГјГ±Гї Г§ Г­Г®Г¬ГҐГ°Г®Г¬ ГЇГ®ГЇГҐГ°ГҐГ¤Г­ГјГ®ГЈГ® Г±Г«Г®ГІГ 
 		brne searchle2
 		cp reg6, reg4
 		brne searchle2
-		lds reg1, lastevnuml	;якщо рівні то цикл повторюється, данні останнього слота приймаються як опорні
+		lds reg1, lastevnuml	;ГїГЄГ№Г® Г°ВіГўГ­Ві ГІГ® Г¶ГЁГЄГ« ГЇГ®ГўГІГ®Г°ГѕВєГІГјГ±Гї, Г¤Г Г­Г­Ві Г®Г±ГІГ Г­Г­ГјГ®ГЈГ® Г±Г«Г®ГІГ  ГЇГ°ГЁГ©Г¬Г ГѕГІГјГ±Гї ГїГЄ Г®ГЇГ®Г°Г­Ві
 		lds reg2, lastevnumh
 		lds reg3, memdata9	
 		lds reg4, memdata8
 		rjmp searchle3
-searchle2:sts lastevnuml, reg1	;якщо ні то попередній слот був останнім і його данні приймаються як опорні
+searchle2:sts lastevnuml, reg1	;ГїГЄГ№Г® Г­Ві ГІГ® ГЇГ®ГЇГҐГ°ГҐГ¤Г­ВіГ© Г±Г«Г®ГІ ГЎГіГў Г®Г±ГІГ Г­Г­ВіГ¬ Ві Г©Г®ГЈГ® Г¤Г Г­Г­Ві ГЇГ°ГЁГ©Г¬Г ГѕГІГјГ±Гї ГїГЄ Г®ГЇГ®Г°Г­Ві
 		sts lastevnumh, reg2
 		sts lastevckll, reg3
 		sts lastevcklh, reg4
@@ -757,13 +758,13 @@ searchle2:sts lastevnuml, reg1	;якщо ні то попередній слот був останнім і його д
 		pop reg1
 		ret
 
-searchll:push reg1	;пошук номера останного логу темпеератури
+searchll:push reg1	;ГЇГ®ГёГіГЄ Г­Г®Г¬ГҐГ°Г  Г®Г±ГІГ Г­Г­Г®ГЈГ® Г«Г®ГЈГі ГІГҐГ¬ГЇГҐГҐГ°Г ГІГіГ°ГЁ
 		push reg2
 		push reg3
 		push reg4
 		push reg5
 		push reg6
-		ldi tmp, 0		;завантаження номера слота з якого почати сканування
+		ldi tmp, 0		;Г§Г ГўГ Г­ГІГ Г¦ГҐГ­Г­Гї Г­Г®Г¬ГҐГ°Г  Г±Г«Г®ГІГ  Г§ ГїГЄГ®ГЈГ® ГЇГ®Г·Г ГІГЁ Г±ГЄГ Г­ГіГўГ Г­Г­Гї
 		sts wordadrh, tmp 
 		ldi tmp, eelastlognuml
 		sts wordadrl, tmp		
@@ -773,7 +774,7 @@ searchll:push reg1	;пошук номера останного логу темпеератури
 		sts wordadrl, tmp		
 		call eeread
 		lds reg2, i2cdata
-		cpi reg2, high(745);перевірка чи більше 745, якщо так то встановлюється 1
+		cpi reg2, high(745);ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГЎВіГ«ГјГёГҐ 745, ГїГЄГ№Г® ГІГ ГЄ ГІГ® ГўГ±ГІГ Г­Г®ГўГ«ГѕВєГІГјГ±Гї 1
 		brlo searchll0
 		cpi reg1, low(745)
 		brlo searchll0
@@ -782,18 +783,18 @@ searchll:push reg1	;пошук номера останного логу темпеератури
 searchll0:sts lastlognuml, reg1
 		sts lastlognumh, reg2
 		ldi tmp, 0
-		sts logdispl, tmp	;зміщення задається 0
+		sts logdispl, tmp	;Г§Г¬ВіГ№ГҐГ­Г­Гї Г§Г Г¤Г ВєГІГјГ±Гї 0
 		sts logdisph, tmp
 		rcall readlog
-		lds reg3, memdata7	;завантажуються значення lastlogckll, як опорне
-		lds reg4, memdata6	;завантажуються значення lastlogcklh, як опорне
+		lds reg3, memdata7	;Г§Г ГўГ Г­ГІГ Г¦ГіГѕГІГјГ±Гї Г§Г­Г Г·ГҐГ­Г­Гї lastlogckll, ГїГЄ Г®ГЇГ®Г°Г­ГҐ
+		lds reg4, memdata6	;Г§Г ГўГ Г­ГІГ Г¦ГіГѕГІГјГ±Гї Г§Г­Г Г·ГҐГ­Г­Гї lastlogcklh, ГїГЄ Г®ГЇГ®Г°Г­ГҐ
 searchll3:mov reg5, reg1
 		mov reg6, reg2
 		ldi tmp, 1
 		add reg5, tmp
 		ldi tmp, 0
 		adc reg6, tmp
-		cpi reg6, high(745)	;перевірка чи номер слота досягнув кінця буфера
+		cpi reg6, high(745)	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­Г®Г¬ГҐГ° Г±Г«Г®ГІГ  Г¤Г®Г±ГїГЈГ­ГіГў ГЄВіГ­Г¶Гї ГЎГіГґГҐГ°Г 
 		brlo searchll1
 		cpi reg5, low(745)
 		brlo searchll1
@@ -827,7 +828,7 @@ searchll2:sts lastlognuml, reg1
 		pop reg1
 		ret
 
-storeevent:push reg1	;збереження події
+storeevent:push reg1	;Г§ГЎГҐГ°ГҐГ¦ГҐГ­Г­Гї ГЇГ®Г¤ВіВї
 		push reg2
 		push reg3
 		push reg4
@@ -835,21 +836,21 @@ storeevent:push reg1	;збереження події
 		push r0
 		push zh
 		push zl
-		lds reg1, lastevnuml ;інкрементування номера слота останнього запису
+		lds reg1, lastevnuml ;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІГіГўГ Г­Г­Гї Г­Г®Г¬ГҐГ°Г  Г±Г«Г®ГІГ  Г®Г±ГІГ Г­Г­ГјГ®ГЈГ® Г§Г ГЇГЁГ±Гі
 		lds reg2, lastevnumh
 		ldi tmp, 1
 		add reg1, tmp
 		ldi tmp, 0
 		adc reg2, tmp
-		cpi reg2, high(501)	;перевірка чи номер слота досягнув кінця буфера
+		cpi reg2, high(501)	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­Г®Г¬ГҐГ° Г±Г«Г®ГІГ  Г¤Г®Г±ГїГЈГ­ГіГў ГЄВіГ­Г¶Гї ГЎГіГґГҐГ°Г 
 		brlo storeeve1
 		cpi reg1, low(501)
 		brlo storeeve1
 		ldi reg1, 1
 		ldi reg2, 0
-storeeve1:sts lastevnuml, reg1	;оновлення номера останнього запису
+storeeve1:sts lastevnuml, reg1	;Г®Г­Г®ГўГ«ГҐГ­Г­Гї Г­Г®Г¬ГҐГ°Г  Г®Г±ГІГ Г­Г­ГјГ®ГЈГ® Г§Г ГЇГЁГ±Гі
 		sts lastevnumh, reg2
-		lds reg3, lastevckll	;інкремент та збереження циклічного номера
+		lds reg3, lastevckll	;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ ГІГ  Г§ГЎГҐГ°ГҐГ¦ГҐГ­Г­Гї Г¶ГЁГЄГ«ВіГ·Г­Г®ГЈГ® Г­Г®Г¬ГҐГ°Г 
 		lds reg4, lastevcklh
 		ldi tmp, 1
 		add reg3, tmp
@@ -859,17 +860,17 @@ storeeve1:sts lastevnuml, reg1	;оновлення номера останнього запису
 		sts memdata9, reg3
 		sts lastevcklh, reg4
 		sts memdata8, reg4
-		ldi tmp, 9		;обрахування абсолютного адреса в памяті, де 9 розмір одного слота
+		ldi tmp, 9		;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г ГЎГ±Г®Г«ГѕГІГ­Г®ГЈГ® Г Г¤Г°ГҐГ±Г  Гў ГЇГ Г¬ГїГІВі, Г¤ГҐ 9 Г°Г®Г§Г¬ВіГ° Г®Г¤Г­Г®ГЈГ® Г±Г«Г®ГІГ 
 		mul reg2, tmp
 		mov reg2, r0
 		mul reg1, tmp
 		mov reg1, r0
 		add reg2, r1
-		ldi tmp, 200	;додавання зміщення
+		ldi tmp, 200	;Г¤Г®Г¤Г ГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		add reg1, tmp
 		ldi tmp, 0
 		adc reg2, tmp
-		ldi reg3, 0		;запис в память 9 байтів слота
+		ldi reg3, 0		;Г§Г ГЇГЁГ± Гў ГЇГ Г¬ГїГІГј 9 ГЎГ Г©ГІВіГў Г±Г«Г®ГІГ 
 		ldi zh, high(memdata1)
 		ldi zl, low(memdata1)		
 storeeve2:sts wordadrl, reg1
@@ -895,7 +896,7 @@ storeeve3:pop zl
 		pop reg1
 		ret
 
-storelog:push reg1	;збереження логу температури
+storelog:push reg1	;Г§ГЎГҐГ°ГҐГ¦ГҐГ­Г­Гї Г«Г®ГЈГі ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°ГЁ
 		push reg2
 		push reg3
 		push reg4
@@ -903,21 +904,21 @@ storelog:push reg1	;збереження логу температури
 		push r0
 		push zh
 		push zl
-		lds reg1, lastlognuml ;інкрементування номера слота останнього запису
+		lds reg1, lastlognuml ;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІГіГўГ Г­Г­Гї Г­Г®Г¬ГҐГ°Г  Г±Г«Г®ГІГ  Г®Г±ГІГ Г­Г­ГјГ®ГЈГ® Г§Г ГЇГЁГ±Гі
 		lds reg2, lastlognumh
 		ldi tmp, 1
 		add reg1, tmp
 		ldi tmp, 0
 		adc reg2, tmp
-		cpi reg2, high(745)	;перевірка чи номер слота досягнув кінця буфера
+		cpi reg2, high(745)	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­Г®Г¬ГҐГ° Г±Г«Г®ГІГ  Г¤Г®Г±ГїГЈГ­ГіГў ГЄВіГ­Г¶Гї ГЎГіГґГҐГ°Г 
 		brlo storelog1
 		cpi reg1, low(745)
 		brlo storelog1
 		ldi reg1, 1
 		ldi reg2, 0
-storelog1:sts lastlognuml, reg1	;оновлення номера останнього запису
+storelog1:sts lastlognuml, reg1	;Г®Г­Г®ГўГ«ГҐГ­Г­Гї Г­Г®Г¬ГҐГ°Г  Г®Г±ГІГ Г­Г­ГјГ®ГЈГ® Г§Г ГЇГЁГ±Гі
 		sts lastlognumh, reg2
-		lds reg3, lastlogckll	;інкремент та збереження циклічного номера
+		lds reg3, lastlogckll	;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ ГІГ  Г§ГЎГҐГ°ГҐГ¦ГҐГ­Г­Гї Г¶ГЁГЄГ«ВіГ·Г­Г®ГЈГ® Г­Г®Г¬ГҐГ°Г 
 		lds reg4, lastlogcklh
 		ldi tmp, 1
 		add reg3, tmp
@@ -927,17 +928,17 @@ storelog1:sts lastlognuml, reg1	;оновлення номера останнього запису
 		sts memdata7, reg3
 		sts lastlogcklh, reg4
 		sts memdata6, reg4
-		ldi tmp, 7		;обрахування абсолютного адреса в памяті, де 7 розмір одного слота
+		ldi tmp, 7		;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г ГЎГ±Г®Г«ГѕГІГ­Г®ГЈГ® Г Г¤Г°ГҐГ±Г  Гў ГЇГ Г¬ГїГІВі, Г¤ГҐ 7 Г°Г®Г§Г¬ВіГ° Г®Г¤Г­Г®ГЈГ® Г±Г«Г®ГІГ 
 		mul reg2, tmp
 		mov reg2, r0
 		mul reg1, tmp
 		mov reg1, r0
 		add reg2, r1
-		ldi tmp, low(4720)	;додавання зміщення
+		ldi tmp, low(4720)	;Г¤Г®Г¤Г ГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		add reg1, tmp
 		ldi tmp, high(4720)
 		adc reg2, tmp
-		ldi reg3, 0		;запис в память 7 байтів слота
+		ldi reg3, 0		;Г§Г ГЇГЁГ± Гў ГЇГ Г¬ГїГІГј 7 ГЎГ Г©ГІВіГў Г±Г«Г®ГІГ 
 		ldi zh, high(memdata1)
 		ldi zl, low(memdata1)		
 storelog2:sts wordadrl, reg1
@@ -963,7 +964,7 @@ storelog3:pop zl
 		pop reg1
 		ret
 
-readevent:push reg1		;зчитування запису з логу подій
+readevent:push reg1		;Г§Г·ГЁГІГіГўГ Г­Г­Гї Г§Г ГЇГЁГ±Гі Г§ Г«Г®ГЈГі ГЇГ®Г¤ВіГ©
 		push reg2
 		push reg3
 		push reg4
@@ -975,32 +976,32 @@ readevent:push reg1		;зчитування запису з логу подій
 		lds reg2, lastevnumh
 		lds reg3, evdispl
 		lds reg4, evdisph
-		cp reg2, reg4		;обрахування зміщення
+		cp reg2, reg4		;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		brlo readeve11
 		cp reg4, reg2
 		brlo readeve15
 		cp reg3, reg1
 		brsh readeve11
-readeve15:sub reg1, reg3	;якщо номер запису більший за зміщення
+readeve15:sub reg1, reg3	;ГїГЄГ№Г® Г­Г®Г¬ГҐГ° Г§Г ГЇГЁГ±Гі ГЎВіГ«ГјГёГЁГ© Г§Г  Г§Г¬ВіГ№ГҐГ­Г­Гї
 		sbc reg2, reg4
 		rjmp readeve2
-readeve11:sub reg3, reg1	;якщо номер запису менший за зміщення
+readeve11:sub reg3, reg1	;ГїГЄГ№Г® Г­Г®Г¬ГҐГ° Г§Г ГЇГЁГ±Гі Г¬ГҐГ­ГёГЁГ© Г§Г  Г§Г¬ВіГ№ГҐГ­Г­Гї
 		sbc reg4, reg2
 		ldi reg1, low(500)
 		ldi reg2, high(500)
 		sub reg1, reg3
 		sbc reg2, reg4
-readeve2:ldi tmp, 9		;обрахування абсолютного адреса в памяті, де 9 розмір одного слота
+readeve2:ldi tmp, 9		;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г ГЎГ±Г®Г«ГѕГІГ­Г®ГЈГ® Г Г¤Г°ГҐГ±Г  Гў ГЇГ Г¬ГїГІВі, Г¤ГҐ 9 Г°Г®Г§Г¬ВіГ° Г®Г¤Г­Г®ГЈГ® Г±Г«Г®ГІГ 
 		mul reg2, tmp
 		mov reg2, r0
 		mul reg1, tmp
 		mov reg1, r0
 		add reg2, r1
-		ldi tmp, 200	;додавання зміщення
+		ldi tmp, 200	;Г¤Г®Г¤Г ГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		add reg1, tmp
 		ldi tmp, 0
 		adc reg2, tmp	
-		ldi reg3, 0		;зчитування з памяті 9 байтів слота
+		ldi reg3, 0		;Г§Г·ГЁГІГіГўГ Г­Г­Гї Г§ ГЇГ Г¬ГїГІВі 9 ГЎГ Г©ГІВіГў Г±Г«Г®ГІГ 
 		ldi zh, high(memdata1)
 		ldi zl, low(memdata1)
 readeve21:sts wordadrl, reg1
@@ -1026,7 +1027,7 @@ readeve3:pop zl
 		pop reg1	
 		ret
 
-readlog:push reg1	;зчитування запису з логу температури
+readlog:push reg1	;Г§Г·ГЁГІГіГўГ Г­Г­Гї Г§Г ГЇГЁГ±Гі Г§ Г«Г®ГЈГі ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°ГЁ
 		push reg2
 		push reg3
 		push reg4
@@ -1038,32 +1039,32 @@ readlog:push reg1	;зчитування запису з логу температури
 		lds reg2, lastlognumh
 		lds reg3, logdispl
 		lds reg4, logdisph
-		cp reg2, reg4		;обрахування зміщення
+		cp reg2, reg4		;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		brlo readlog11
 		cp reg4, reg2
 		brlo readlog15
 		cp reg3, reg1
 		brsh readlog11
-readlog15:sub reg1, reg3	;якщо номер запису більший за зміщення
+readlog15:sub reg1, reg3	;ГїГЄГ№Г® Г­Г®Г¬ГҐГ° Г§Г ГЇГЁГ±Гі ГЎВіГ«ГјГёГЁГ© Г§Г  Г§Г¬ВіГ№ГҐГ­Г­Гї
 		sbc reg2, reg4
 		rjmp readlog2
-readlog11:sub reg3, reg1	;якщо номер запису менший за зміщення
+readlog11:sub reg3, reg1	;ГїГЄГ№Г® Г­Г®Г¬ГҐГ° Г§Г ГЇГЁГ±Гі Г¬ГҐГ­ГёГЁГ© Г§Г  Г§Г¬ВіГ№ГҐГ­Г­Гї
 		sbc reg4, reg2
 		ldi reg1, low(744)
 		ldi reg2, high(744)
 		sub reg1, reg3
 		sbc reg2, reg4
-readlog2:ldi tmp, 7		;обрахування абсолютного адреса в памяті, де 7 розмір одного слота
+readlog2:ldi tmp, 7		;Г®ГЎГ°Г ГµГіГўГ Г­Г­Гї Г ГЎГ±Г®Г«ГѕГІГ­Г®ГЈГ® Г Г¤Г°ГҐГ±Г  Гў ГЇГ Г¬ГїГІВі, Г¤ГҐ 7 Г°Г®Г§Г¬ВіГ° Г®Г¤Г­Г®ГЈГ® Г±Г«Г®ГІГ 
 		mul reg2, tmp
 		mov reg2, r0
 		mul reg1, tmp
 		mov reg1, r0
 		add reg2, r1
-		ldi tmp, low(4720)	;додавання зміщення
+		ldi tmp, low(4720)	;Г¤Г®Г¤Г ГўГ Г­Г­Гї Г§Г¬ВіГ№ГҐГ­Г­Гї
 		add reg1, tmp
 		ldi tmp, high(4720)
 		adc reg2, tmp	
-		ldi reg3, 0		;зчитування з памяті 7 байтів слота
+		ldi reg3, 0		;Г§Г·ГЁГІГіГўГ Г­Г­Гї Г§ ГЇГ Г¬ГїГІВі 7 ГЎГ Г©ГІВіГў Г±Г«Г®ГІГ 
 		ldi zh, high(memdata1)
 		ldi zl, low(memdata1)
 readlog21:sts wordadrl, reg1
@@ -1101,20 +1102,20 @@ readlog3:pop zl
 .equ	lastlogcklh = $169
 .equ	logdispl = $16a
 .equ	logdisph = $16b
-.equ	gmemadr = $16c	;адрес для загальних данних 0-199 EEPRON, 200 коректуюча константа RTC, 201-250 NVRAM
-.equ	memdata1 = $16d ;рік			/рік			/загальні дані EEPROM/NVRAM
-.equ	memdata2 = $16e	;місяць			/місяць
-.equ	memdata3 = $16f	;день			/день
-.equ	memdata4 = $170	;година			/година	
-.equ	memdata5 = $171	;хвилина		/температура
-.equ	memdata6 = $172	;код події		/циклічний номер
-.equ	memdata7 = $173	;опційні дані	/циклічний номер
-.equ	memdata8 = $174	;циклічний номер
-.equ	memdata9 = $175	;циклічний номер
+.equ	gmemadr = $16c	;Г Г¤Г°ГҐГ± Г¤Г«Гї Г§Г ГЈГ Г«ГјГ­ГЁГµ Г¤Г Г­Г­ГЁГµ 0-199 EEPRON, 200 ГЄГ®Г°ГҐГЄГІГіГѕГ·Г  ГЄГ®Г­Г±ГІГ Г­ГІГ  RTC, 201-250 NVRAM
+.equ	memdata1 = $16d ;Г°ВіГЄ			/Г°ВіГЄ			/Г§Г ГЈГ Г«ГјГ­Ві Г¤Г Г­Ві EEPROM/NVRAM
+.equ	memdata2 = $16e	;Г¬ВіГ±ГїГ¶Гј			/Г¬ВіГ±ГїГ¶Гј
+.equ	memdata3 = $16f	;Г¤ГҐГ­Гј			/Г¤ГҐГ­Гј
+.equ	memdata4 = $170	;ГЈГ®Г¤ГЁГ­Г 			/ГЈГ®Г¤ГЁГ­Г 	
+.equ	memdata5 = $171	;ГµГўГЁГ«ГЁГ­Г 		/ГІГҐГ¬ГЇГҐГ°Г ГІГіГ°Г 
+.equ	memdata6 = $172	;ГЄГ®Г¤ ГЇГ®Г¤ВіВї		/Г¶ГЁГЄГ«ВіГ·Г­ГЁГ© Г­Г®Г¬ГҐГ°
+.equ	memdata7 = $173	;Г®ГЇГ¶ВіГ©Г­Ві Г¤Г Г­Ві	/Г¶ГЁГЄГ«ВіГ·Г­ГЁГ© Г­Г®Г¬ГҐГ°
+.equ	memdata8 = $174	;Г¶ГЁГЄГ«ВіГ·Г­ГЁГ© Г­Г®Г¬ГҐГ°
+.equ	memdata9 = $175	;Г¶ГЁГЄГ«ВіГ·Г­ГЁГ© Г­Г®Г¬ГҐГ°
 
 ;_________________________________________________ RTC/Calendar ____________________________________________________________________________
 
-gettime:push reg1		;отримати час від RTC
+gettime:push reg1		;Г®ГІГ°ГЁГ¬Г ГІГЁ Г·Г Г± ГўВіГ¤ RTC
 		push zh
 		push zl
 		rcall i2cstart
@@ -1147,7 +1148,7 @@ gettime2:rcall i2cmnack
 		pop reg1
 		ret
 
-settime:push reg1		;записати час в RTC
+settime:push reg1		;Г§Г ГЇГЁГ±Г ГІГЁ Г·Г Г± Гў RTC
 		push zh
 		push zl
 		rcall dectobcd
@@ -1156,7 +1157,7 @@ settime:push reg1		;записати час в RTC
 		sts i2cbuf, tmp
 		rcall i2ctx
 		ldi tmp, 0
-		sts i2cbuf, tmp		;встановити адрес 1 ячейки
+		sts i2cbuf, tmp		;ГўГ±ГІГ Г­Г®ГўГЁГІГЁ Г Г¤Г°ГҐГ± 1 ГїГ·ГҐГ©ГЄГЁ
 		rcall i2ctx
 		ldi reg1, 0
 		ldi zh, high(rtcbuf1)
@@ -1173,7 +1174,7 @@ settime1:ld tmp, z+
 		pop reg1	
 		ret
 
-bcdtodec:lds tmp, rtcbuf1		;Программа для перетворення BCD данних від RTC в DEC.
+bcdtodec:lds tmp, rtcbuf1		;ГЏГ°Г®ГЈГ°Г Г¬Г¬Г  Г¤Г«Гї ГЇГҐГ°ГҐГІГўГ®Г°ГҐГ­Г­Гї BCD Г¤Г Г­Г­ГЁГµ ГўВіГ¤ RTC Гў DEC.
 		andi tmp, 0b01111111
 		rcall bcdtdsp
 		sts timesec, tmp
@@ -1199,8 +1200,8 @@ bcdtodec:lds tmp, rtcbuf1		;Программа для перетворення BCD данних від RTC в DEC.
 		sts timeyear, tmp
 		ret
 
-bcdtdsp:push reg1				;Субпрограмма перетворення BCD числа в десяткове
-		push reg2				;використовується регістр TMP
+bcdtdsp:push reg1				;Г‘ГіГЎГЇГ°Г®ГЈГ°Г Г¬Г¬Г  ГЇГҐГ°ГҐГІГўГ®Г°ГҐГ­Г­Гї BCD Г·ГЁГ±Г«Г  Гў Г¤ГҐГ±ГїГІГЄГ®ГўГҐ
+		push reg2				;ГўГЁГЄГ®Г°ГЁГ±ГІГ®ГўГіВєГІГјГ±Гї Г°ГҐГЈВіГ±ГІГ° TMP
 		push r0
 		push r1
 		mov reg2, tmp			
@@ -1216,7 +1217,7 @@ bcdtdsp:push reg1				;Субпрограмма перетворення BCD числа в десяткове
 		pop reg1
 		ret
 
-dectobcd:lds tmp, timesec	;Программа для перетворення DEC в BCD для настройки RTC
+dectobcd:lds tmp, timesec	;ГЏГ°Г®ГЈГ°Г Г¬Г¬Г  Г¤Г«Гї ГЇГҐГ°ГҐГІГўГ®Г°ГҐГ­Г­Гї DEC Гў BCD Г¤Г«Гї Г­Г Г±ГІГ°Г®Г©ГЄГЁ RTC
 		rcall dectbsp
 		sts rtcbuf1, tmp
 		lds tmp, timemin		
@@ -1238,8 +1239,8 @@ dectobcd:lds tmp, timesec	;Программа для перетворення DEC в BCD для настройки RT
 		sts rtcbuf7, tmp		
 		ret
 
-dectbsp:push reg1				;Субпрограмма перетворення десяткового числа в BCD
-		ldi reg1, 0				;використовується регістр TMP
+dectbsp:push reg1				;Г‘ГіГЎГЇГ°Г®ГЈГ°Г Г¬Г¬Г  ГЇГҐГ°ГҐГІГўГ®Г°ГҐГ­Г­Гї Г¤ГҐГ±ГїГІГЄГ®ГўГ®ГЈГ® Г·ГЁГ±Г«Г  Гў BCD
+		ldi reg1, 0				;ГўГЁГЄГ®Г°ГЁГ±ГІГ®ГўГіВєГІГјГ±Гї Г°ГҐГЈВіГ±ГІГ° TMP
 dctbs_2:cpi tmp, 10
 		brlo dctbs_1
 		subi tmp, 10
@@ -1268,27 +1269,27 @@ dctbs_1:swap reg1
 
 eewrite:push reg1
 		push reg2
-		ldi reg1, 0	;лічильник спроб звязку
-		ldi reg2, 0	;лічильник спроб запису		 
+		ldi reg1, 0	;Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі
+		ldi reg2, 0	;Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Г±ГЇГ°Г®ГЎ Г§Г ГЇГЁГ±Гі		 
 eewrite12:rcall i2cstart
 		ldi tmp, 0b10100000
 		sts i2cbuf, tmp
 		rcall i2ctx
 		lds tmp, eefreg
 		bst tmp, 0
-		brtc eewrite2	;перевірка чи еепром видала ацк
-		rcall i2cstop	;якщо ні то стоп
-		inc reg1	;якщо ні то інкремент лічильника спроб звязку
-		cpi reg1, 5		;перевірка чи досягнуто ліміту спроб звязку
+		brtc eewrite2	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГҐГҐГЇГ°Г®Г¬ ГўГЁГ¤Г Г«Г  Г Г¶ГЄ
+		rcall i2cstop	;ГїГЄГ№Г® Г­Ві ГІГ® Г±ГІГ®ГЇ
+		inc reg1	;ГїГЄГ№Г® Г­Ві ГІГ® ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г«ВіГ·ГЁГ«ГјГ­ГЁГЄГ  Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі
+		cpi reg1, 5		;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г¤Г®Г±ГїГЈГ­ГіГІГ® Г«ВіГ¬ВіГІГі Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі
 		brlo eewrite11
 		set
-		bld gereg1, eecerr	;якщо ліміт досягнуто, то виставляється біт помилки
+		bld gereg1, eecerr	;ГїГЄГ№Г® Г«ВіГ¬ВіГІ Г¤Г®Г±ГїГЈГ­ГіГІГ®, ГІГ® ГўГЁГ±ГІГ ГўГ«ГїВєГІГјГ±Гї ГЎВіГІ ГЇГ®Г¬ГЁГ«ГЄГЁ
 		rjmp eewrite9
-eewrite11:rcall del1ms	;якщо ліміт не досягнуто, затримка 1 мс і повторна спроба
+eewrite11:rcall del1ms	;ГїГЄГ№Г® Г«ВіГ¬ВіГІ Г­ГҐ Г¤Г®Г±ГїГЈГ­ГіГІГ®, Г§Г ГІГ°ГЁГ¬ГЄГ  1 Г¬Г± Ві ГЇГ®ГўГІГ®Г°Г­Г  Г±ГЇГ°Г®ГЎГ 
 		rjmp eewrite12
-eewrite2:ldi reg1, 0	;скидання лічильника спроб звязку
+eewrite2:ldi reg1, 0	;Г±ГЄГЁГ¤Г Г­Г­Гї Г«ВіГ·ГЁГ«ГјГ­ГЁГЄГ  Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі
 		clt
-		bld gereg1, eecerr ;скидання прапорця спроб звязку
+		bld gereg1, eecerr ;Г±ГЄГЁГ¤Г Г­Г­Гї ГЇГ°Г ГЇГ®Г°Г¶Гї Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі
 		lds tmp, wordadrh
 		sts i2cbuf, tmp
 		rcall i2ctx
@@ -1299,47 +1300,47 @@ eewrite2:ldi reg1, 0	;скидання лічильника спроб звязку
 		sts i2cbuf, tmp
 		rcall i2ctx
 		rcall i2cstop
-		rcall del6ms	;очікування на процедуру запису		
+		rcall del6ms	;Г®Г·ВіГЄГіГўГ Г­Г­Гї Г­Г  ГЇГ°Г®Г¶ГҐГ¤ГіГ°Гі Г§Г ГЇГЁГ±Гі		
 		lds reg1, i2cdata
 		rcall eeread
-		bst gereg1, eecerr ;перевірка чи після зчитування встановився біт помилки звязку
+		bst gereg1, eecerr ;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГЇВіГ±Г«Гї Г§Г·ГЁГІГіГўГ Г­Г­Гї ГўГ±ГІГ Г­Г®ГўГЁГўГ±Гї ГЎВіГІ ГЇГ®Г¬ГЁГ«ГЄГЁ Г§ГўГїГ§ГЄГі
 		brts eewrite13
 		lds tmp, i2cdata
 		cp tmp, reg1	
-		brne eewrite13	;якщо данні записані правельно то вихід з процедури запису
+		brne eewrite13	;ГїГЄГ№Г® Г¤Г Г­Г­Ві Г§Г ГЇГЁГ±Г Г­Ві ГЇГ°Г ГўГҐГ«ГјГ­Г® ГІГ® ГўГЁГµВіГ¤ Г§ ГЇГ°Г®Г¶ГҐГ¤ГіГ°ГЁ Г§Г ГЇГЁГ±Гі
 		clt
-		bld gereg1, eewerr	;скидання біту помилки запису
+		bld gereg1, eewerr	;Г±ГЄГЁГ¤Г Г­Г­Гї ГЎВіГІГі ГЇГ®Г¬ГЁГ«ГЄГЁ Г§Г ГЇГЁГ±Гі
 		rjmp eewrite9
 eewrite13:inc reg2
 		cpi reg2, 5
-		brsh eewrite4	;перевірка чи досягнути ліміт спроб запису
-		rjmp eewrite12	;якщо ні то повторна спроба		
+		brsh eewrite4	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г¤Г®Г±ГїГЈГ­ГіГІГЁ Г«ВіГ¬ВіГІ Г±ГЇГ°Г®ГЎ Г§Г ГЇГЁГ±Гі
+		rjmp eewrite12	;ГїГЄГ№Г® Г­Ві ГІГ® ГЇГ®ГўГІГ®Г°Г­Г  Г±ГЇГ°Г®ГЎГ 		
 eewrite4:set
-		bld gereg1, eewerr	;якщо так то встановлюється біт помилки запису		
+		bld gereg1, eewerr	;ГїГЄГ№Г® ГІГ ГЄ ГІГ® ГўГ±ГІГ Г­Г®ГўГ«ГѕВєГІГјГ±Гї ГЎВіГІ ГЇГ®Г¬ГЁГ«ГЄГЁ Г§Г ГЇГЁГ±Гі		
 eewrite9:pop reg2
 		pop reg1
 		ret
 
 eeread:	push reg1
-		ldi reg1, 0	;лічильник спроб звязку		 
+		ldi reg1, 0	;Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі		 
 eeread12:rcall i2cstart
 		ldi tmp, 0b10100000
 		sts i2cbuf, tmp
 		rcall i2ctx
 		lds tmp, eefreg
 		bst tmp, 0
-		brtc eeread2	;перевірка чи еепром видала ацк
+		brtc eeread2	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГҐГҐГЇГ°Г®Г¬ ГўГЁГ¤Г Г«Г  Г Г¶ГЄ
 		rcall i2cstop
-		inc reg1	;якщо ні то інкремент лічильника спроб звязку
-		cpi reg1, 6		;перевірка чи досягнуто ліміту спроб звязку
+		inc reg1	;ГїГЄГ№Г® Г­Ві ГІГ® ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г«ВіГ·ГЁГ«ГјГ­ГЁГЄГ  Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі
+		cpi reg1, 6		;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г¤Г®Г±ГїГЈГ­ГіГІГ® Г«ВіГ¬ВіГІГі Г±ГЇГ°Г®ГЎ Г§ГўГїГ§ГЄГі
 		brlo eeread11
 		set
-		bld gereg1, eecerr	;якщо ліміт досягнуто, то виставляється біт помилки звязку
+		bld gereg1, eecerr	;ГїГЄГ№Г® Г«ВіГ¬ВіГІ Г¤Г®Г±ГїГЈГ­ГіГІГ®, ГІГ® ГўГЁГ±ГІГ ГўГ«ГїВєГІГјГ±Гї ГЎВіГІ ГЇГ®Г¬ГЁГ«ГЄГЁ Г§ГўГїГ§ГЄГі
 		rjmp eeread9
-eeread11:rcall del1ms	;якщо ліміт не досягнуто, затримка 1 мс і повторна спроба
+eeread11:rcall del1ms	;ГїГЄГ№Г® Г«ВіГ¬ВіГІ Г­ГҐ Г¤Г®Г±ГїГЈГ­ГіГІГ®, Г§Г ГІГ°ГЁГ¬ГЄГ  1 Г¬Г± Ві ГЇГ®ГўГІГ®Г°Г­Г  Г±ГЇГ°Г®ГЎГ 
 		rjmp eeread12
 eeread2:clt
-		bld gereg1, eecerr	;скидання біту помилки звязку
+		bld gereg1, eecerr	;Г±ГЄГЁГ¤Г Г­Г­Гї ГЎВіГІГі ГЇГ®Г¬ГЁГ«ГЄГЁ Г§ГўГїГ§ГЄГі
 		lds tmp, wordadrh
 		sts i2cbuf, tmp
 		rcall i2ctx
@@ -1423,11 +1424,11 @@ starti2c:ldi tmp, 0
 .equ	wordadrl = $13b
 .equ	wordadrh = $13c
 .equ	i2cdata = $13d
-.equ	eefreg = $13e	;регістр прапорців шини I2C  , 0 - Ацк слейва
+.equ	eefreg = $13e	;Г°ГҐГЈВіГ±ГІГ° ГЇГ°Г ГЇГ®Г°Г¶ВіГў ГёГЁГ­ГЁ I2C  , 0 - ГЂГ¶ГЄ Г±Г«ГҐГ©ГўГ 
 
 ;_____________________________________________ I2C Protocol ____________________________________________________________________________
 
-i2cstart:lds tmp, ddrg		;початкова конфігурація порта/старт
+i2cstart:lds tmp, ddrg		;ГЇГ®Г·Г ГІГЄГ®ГўГ  ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї ГЇГ®Г°ГІГ /Г±ГІГ Г°ГІ
 		andi tmp, 0b11101111
 		sts ddrg, tmp	;cbi ddrg, 4
 		lds tmp, portg
@@ -1468,13 +1469,13 @@ cbisda:	lds tmp, ddrg
 		ret
 
 
-i2cstop:rcall sbiscl	;стоп
+i2cstop:rcall sbiscl	;Г±ГІГ®ГЇ
 		rcall deli2c
 		rcall sbisda
 		rcall deli2c
 		ret
 
-i2ctx:	push reg6	;відправка одного байта, обмін через TMP, стан ACK в біті T
+i2ctx:	push reg6	;ГўВіГ¤ГЇГ°Г ГўГЄГ  Г®Г¤Г­Г®ГЈГ® ГЎГ Г©ГІГ , Г®ГЎГ¬ВіГ­ Г·ГҐГ°ГҐГ§ TMP, Г±ГІГ Г­ ACK Гў ГЎВіГІВі T
 		push reg1
 		ldi reg6, 8
 		lds reg1, i2cbuf
@@ -1495,7 +1496,7 @@ i2ctx2:	rcall deli2c
 		pop reg6
 		ret
 
-i2crx:	push reg6	;отримання одного байта, обмін через TMP, ACK не викликається
+i2crx:	push reg6	;Г®ГІГ°ГЁГ¬Г Г­Г­Гї Г®Г¤Г­Г®ГЈГ® ГЎГ Г©ГІГ , Г®ГЎГ¬ВіГ­ Г·ГҐГ°ГҐГ§ TMP, ACK Г­ГҐ ГўГЁГЄГ«ГЁГЄГ ВєГІГјГ±Гї
 		push reg1
 		ldi reg6, 8
 		ldi reg1, 0
@@ -1518,7 +1519,7 @@ i2crx2:	rol reg1
 		pop reg6
 		ret
 
-i2csack:rcall sbisda	;ACK, відповідь слейва мастеру
+i2csack:rcall sbisda	;ACK, ГўВіГ¤ГЇГ®ГўВіГ¤Гј Г±Г«ГҐГ©ГўГ  Г¬Г Г±ГІГҐГ°Гі
 		rcall deli2c
 		rcall sbiscl
 		rcall deli2c
@@ -1533,7 +1534,7 @@ i2csack:rcall sbisda	;ACK, відповідь слейва мастеру
 		rcall deli2c
 		ret
 
-i2cmack:rcall cbisda	;ACK, відповідь мастера слейву
+i2cmack:rcall cbisda	;ACK, ГўВіГ¤ГЇГ®ГўВіГ¤Гј Г¬Г Г±ГІГҐГ°Г  Г±Г«ГҐГ©ГўГі
 		rcall deli2c
 		rcall sbiscl
 		rcall deli2c
@@ -1541,7 +1542,7 @@ i2cmack:rcall cbisda	;ACK, відповідь мастера слейву
 		rcall deli2c
 		ret
 
-i2cmnack:rcall sbisda	;NACK, відповідь мастера слейву
+i2cmnack:rcall sbisda	;NACK, ГўВіГ¤ГЇГ®ГўВіГ¤Гј Г¬Г Г±ГІГҐГ°Г  Г±Г«ГҐГ©ГўГі
 		rcall deli2c
 		rcall sbiscl
 		rcall deli2c
@@ -1552,7 +1553,7 @@ i2cmnack:rcall sbisda	;NACK, відповідь мастера слейву
 		ret	
 
 deli2c:	push reg8
-		ldi reg8, 25		;зменшив з 50 до 25
+		ldi reg8, 25		;Г§Г¬ГҐГ­ГёГЁГў Г§ 50 Г¤Г® 25
 deic1:	dec reg8
 		brne deic1
 		pop reg8
@@ -1576,7 +1577,7 @@ fasttimer:push tmp ;Timer2
 		pop tmp
 		reti
 
-fasttmstart:ldi tmp, 0b00000100	;запуск швидкого таймера
+fasttmstart:ldi tmp, 0b00000100	;Г§Г ГЇГіГ±ГЄ ГёГўГЁГ¤ГЄГ®ГЈГ® ГІГ Г©Г¬ГҐГ°Г 
 		out tccr2, tmp
 		in tmp, timsk
 		ori tmp, 0b11000000
@@ -1597,28 +1598,28 @@ dscomm:	push reg1		;OPOPOP.........|.......OPOP\end.....
 
 		lds reg1, dscommsteph
 		lds reg2, dscommstepl
-		cpi reg1, 255	;якщо 255 виконання заборонено, на вихід
+		cpi reg1, 255	;ГїГЄГ№Г® 255 ГўГЁГЄГ®Г­Г Г­Г­Гї Г§Г ГЎГ®Г°Г®Г­ГҐГ­Г®, Г­Г  ГўГЁГµВіГ¤
 		brne dscomm1
 		rjmp dscomme
-dscomm1:cpi reg1, 1		;вибір молодшої чи старшої підпрограми
+dscomm1:cpi reg1, 1		;ГўГЁГЎВіГ° Г¬Г®Г«Г®Г¤ГёГ®Вї Г·ГЁ Г±ГІГ Г°ГёГ®Вї ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬ГЁ
 		brne dscomm11
 		rjmp dscomm2
 
-dscomm11:cpi reg2, 3	;якщо dscommsteph = 0
-		brlo dscomm12	;якщо всі операції з молодшої групи виконані то пропуск тактів до переповнення dscommstepl
+dscomm11:cpi reg2, 3	;ГїГЄГ№Г® dscommsteph = 0
+		brlo dscomm12	;ГїГЄГ№Г® ГўГ±Ві Г®ГЇГҐГ°Г Г¶ВіВї Г§ Г¬Г®Г«Г®Г¤ГёГ®Вї ГЈГ°ГіГЇГЁ ГўГЁГЄГ®Г­Г Г­Ві ГІГ® ГЇГ°Г®ГЇГіГ±ГЄ ГІГ ГЄГІВіГў Г¤Г® ГЇГҐГ°ГҐГЇГ®ГўГ­ГҐГ­Г­Гї dscommstepl
 		rjmp dscomm1a
 dscomm12:mov tmp, reg2
 		lsl tmp
-		ldi zh, high(2*dwdsdsopl) ;вибір потрібної операції молодшої групи
-		ldi zl, low(2*dwdsdsopl)  ;операції молодшої групи дають команду на запуск вимірювання
-		add zl, tmp				  ;далі решту молодшої групи та частину старшої пропуск тактів (щоб > 750ms)
+		ldi zh, high(2*dwdsdsopl) ;ГўГЁГЎВіГ° ГЇГ®ГІГ°ВіГЎГ­Г®Вї Г®ГЇГҐГ°Г Г¶ВіВї Г¬Г®Г«Г®Г¤ГёГ®Вї ГЈГ°ГіГЇГЁ
+		ldi zl, low(2*dwdsdsopl)  ;Г®ГЇГҐГ°Г Г¶ВіВї Г¬Г®Г«Г®Г¤ГёГ®Вї ГЈГ°ГіГЇГЁ Г¤Г ГѕГІГј ГЄГ®Г¬Г Г­Г¤Гі Г­Г  Г§Г ГЇГіГ±ГЄ ГўГЁГ¬ВіГ°ГѕГўГ Г­Г­Гї
+		add zl, tmp				  ;Г¤Г Г«Ві Г°ГҐГёГІГі Г¬Г®Г«Г®Г¤ГёГ®Вї ГЈГ°ГіГЇГЁ ГІГ  Г·Г Г±ГІГЁГ­Гі Г±ГІГ Г°ГёГ®Вї ГЇГ°Г®ГЇГіГ±ГЄ ГІГ ГЄГІВіГў (Г№Г®ГЎ > 750ms)
 		clr tmp
 		adc zh, tmp
 		lpm r0, z+
 		lpm r1, z
 		movw zh:zl,r1:r0
 		icall		
-dscomm1a:inc reg2		;інкремент номера кроку, якщо переповнення то dscommsteph = 1
+dscomm1a:inc reg2		;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г­Г®Г¬ГҐГ°Г  ГЄГ°Г®ГЄГі, ГїГЄГ№Г® ГЇГҐГ°ГҐГЇГ®ГўГ­ГҐГ­Г­Гї ГІГ® dscommsteph = 1
 		cpi reg2, 255
 		brsh dscomm1b
 		rjmp dscomm3
@@ -1626,16 +1627,16 @@ dscomm1b:ldi reg2, 0
 		ldi reg1, 1
 		rjmp dscomm3
 
-dscomm2:cpi reg2, 40	;якщо dscommsteph = 1
-		brsh dscomm21	;доки dscommstepl не досягне 40, пропук тактів	
+dscomm2:cpi reg2, 40	;ГїГЄГ№Г® dscommsteph = 1
+		brsh dscomm21	;Г¤Г®ГЄГЁ dscommstepl Г­ГҐ Г¤Г®Г±ГїГЈГ­ГҐ 40, ГЇГ°Г®ГЇГіГЄ ГІГ ГЄГІВіГў	
 		rjmp dscomm2a
-dscomm21:cpi reg2, 53	;якщо більше 52 то пропуск тактів, це прібно для збільшення періода між вимірюваннями (саморозігрів)
+dscomm21:cpi reg2, 53	;ГїГЄГ№Г® ГЎВіГ«ГјГёГҐ 52 ГІГ® ГЇГ°Г®ГЇГіГ±ГЄ ГІГ ГЄГІВіГў, Г¶ГҐ ГЇГ°ВіГЎГ­Г® Г¤Г«Гї Г§ГЎВіГ«ГјГёГҐГ­Г­Гї ГЇГҐГ°ВіГ®Г¤Г  Г¬ВіГ¦ ГўГЁГ¬ВіГ°ГѕГўГ Г­Г­ГїГ¬ГЁ (Г±Г Г¬Г®Г°Г®Г§ВіГЈГ°ВіГў)
 		brsh dscomm2a
 		mov tmp, reg2
-		subi tmp, 40	;віднімається число зміщення - 40, це потрібно для адресації (таким чином формується затримка між групами (>750ms))
+		subi tmp, 40	;ГўВіГ¤Г­ВіГ¬Г ВєГІГјГ±Гї Г·ГЁГ±Г«Г® Г§Г¬ВіГ№ГҐГ­Г­Гї - 40, Г¶ГҐ ГЇГ®ГІГ°ВіГЎГ­Г® Г¤Г«Гї Г Г¤Г°ГҐГ±Г Г¶ВіВї (ГІГ ГЄГЁГ¬ Г·ГЁГ­Г®Г¬ ГґГ®Г°Г¬ГіВєГІГјГ±Гї Г§Г ГІГ°ГЁГ¬ГЄГ  Г¬ВіГ¦ ГЈГ°ГіГЇГ Г¬ГЁ (>750ms))
 		lsl tmp
-		ldi zh, high(2*dwdsdsoph) ;вибір потрібної операції старшої групи
-		ldi zl, low(2*dwdsdsoph)  ;операції старшої групи зчитують та обробляють результати
+		ldi zh, high(2*dwdsdsoph) ;ГўГЁГЎВіГ° ГЇГ®ГІГ°ВіГЎГ­Г®Вї Г®ГЇГҐГ°Г Г¶ВіВї Г±ГІГ Г°ГёГ®Вї ГЈГ°ГіГЇГЁ
+		ldi zl, low(2*dwdsdsoph)  ;Г®ГЇГҐГ°Г Г¶ВіВї Г±ГІГ Г°ГёГ®Вї ГЈГ°ГіГЇГЁ Г§Г·ГЁГІГіГѕГІГј ГІГ  Г®ГЎГ°Г®ГЎГ«ГїГѕГІГј Г°ГҐГ§ГіГ«ГјГІГ ГІГЁ
 		add zl, tmp
 		clr tmp
 		adc zh, tmp
@@ -1643,7 +1644,7 @@ dscomm21:cpi reg2, 53	;якщо більше 52 то пропуск тактів, це прібно для збільшенн
 		lpm r1, z
 		movw zh:zl,r1:r0
 		icall
-dscomm2a:inc reg2	;інкремент номера кроку, якщо переповнення то dscommsteph = 0
+dscomm2a:inc reg2	;ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г­Г®Г¬ГҐГ°Г  ГЄГ°Г®ГЄГі, ГїГЄГ№Г® ГЇГҐГ°ГҐГЇГ®ГўГ­ГҐГ­Г­Гї ГІГ® dscommsteph = 0
 		cpi reg2, 255
 		brlo dscomm3
 		ldi reg2, 0
@@ -1721,19 +1722,19 @@ dsopproces:push reg1
 		rcall getcrc8
 		lds tmp, dscommfreg
 		cpi tmp, 0		
-		breq dsproces11	;перевірка чи не встановлені прапорці помилки, якщо ні то нормальна обробка
+		breq dsproces11	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­ГҐ ГўГ±ГІГ Г­Г®ГўГ«ГҐГ­Ві ГЇГ°Г ГЇГ®Г°Г¶Ві ГЇГ®Г¬ГЁГ«ГЄГЁ, ГїГЄГ№Г® Г­Ві ГІГ® Г­Г®Г°Г¬Г Г«ГјГ­Г  Г®ГЎГ°Г®ГЎГЄГ 
 		ldi tmp, 0
-		sts w1dvcount, tmp ;скидання лічильника дійсних даних
+		sts w1dvcount, tmp ;Г±ГЄГЁГ¤Г Г­Г­Гї Г«ВіГ·ГЁГ«ГјГ­ГЁГЄГ  Г¤ВіГ©Г±Г­ГЁГµ Г¤Г Г­ГЁГµ
 		lds reg1, w1ercount
-		cpi reg1, 3		;перевірка чи було вже 3 помилки
+		cpi reg1, 3		;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГЎГіГ«Г® ГўГ¦ГҐ 3 ГЇГ®Г¬ГЁГ«ГЄГЁ
 		brsh dsproces12	
 		inc reg1
 		sts w1ercount, reg1
 		cpi reg1, 3
 		brsh dsproces12
-		rjmp dsproces3	;якщо ні то просто вихід без обробки
+		rjmp dsproces3	;ГїГЄГ№Г® Г­Ві ГІГ® ГЇГ°Г®Г±ГІГ® ГўГЁГµВіГ¤ ГЎГҐГ§ Г®ГЎГ°Г®ГЎГЄГЁ
 dsproces12:lds tmp, dscommfreg
-		bst tmp, 0	;якщо так то копіювання бітів помилок в gereg
+		bst tmp, 0	;ГїГЄГ№Г® ГІГ ГЄ ГІГ® ГЄГ®ГЇВіГѕГўГ Г­Г­Гї ГЎВіГІВіГў ГЇГ®Г¬ГЁГ«Г®ГЄ Гў gereg
 		bld gereg1, dscome
 		bst tmp, 1
 		bld gereg1, dscrce
@@ -1743,20 +1744,20 @@ dsproces12:lds tmp, dscommfreg
 		bld gereg1, dsdtv
 		rjmp dsproces3
 dsproces11:lds tmp, w1dvcount
-		cpi tmp, 2		;перше вимірювання ігнорується
-		brsh dsproces13	;це потрібно щоб результати першого виміру після помилки або запуску ігнорувалися
+		cpi tmp, 2		;ГЇГҐГ°ГёГҐ ГўГЁГ¬ВіГ°ГѕГўГ Г­Г­Гї ВіГЈГ­Г®Г°ГіВєГІГјГ±Гї
+		brsh dsproces13	;Г¶ГҐ ГЇГ®ГІГ°ВіГЎГ­Г® Г№Г®ГЎ Г°ГҐГ§ГіГ«ГјГІГ ГІГЁ ГЇГҐГ°ГёГ®ГЈГ® ГўГЁГ¬ВіГ°Гі ГЇВіГ±Г«Гї ГЇГ®Г¬ГЁГ«ГЄГЁ Г ГЎГ® Г§Г ГЇГіГ±ГЄГі ВіГЈГ­Г®Г°ГіГўГ Г«ГЁГ±Гї
 		inc tmp
 		sts w1dvcount, tmp
 		rjmp dsproces3
 dsproces13:ldi tmp, 0
-		sts w1ercount, tmp	;скидання лічильника помилок
+		sts w1ercount, tmp	;Г±ГЄГЁГ¤Г Г­Г­Гї Г«ВіГ·ГЁГ«ГјГ­ГЁГЄГ  ГЇГ®Г¬ГЁГ«Г®ГЄ
 		clt
 		bld gereg1, dscome
 		bld gereg1, dspwdn
-		bld gereg1, dscrce	;скидання прапорців помилок
+		bld gereg1, dscrce	;Г±ГЄГЁГ¤Г Г­Г­Гї ГЇГ°Г ГЇГ®Г°Г¶ВіГў ГЇГ®Г¬ГЁГ«Г®ГЄ
 		set
-		bld gereg1, dsdtv	;дані дійсні
-		lds reg1, dscommbuf1 ;обробка данних
+		bld gereg1, dsdtv	;Г¤Г Г­Ві Г¤ВіГ©Г±Г­Ві
+		lds reg1, dscommbuf1 ;Г®ГЎГ°Г®ГЎГЄГ  Г¤Г Г­Г­ГЁГµ
 		swap reg1
 		andi reg1, $f0
 		lds tmp, dscommbuf0
@@ -1782,7 +1783,7 @@ dsproces21:sts tempods, reg1
 		lpm tmp, z
 		sts temppar, tmp
 		set
-		bld toutreg, slot1tint	;виклик підпрограми переносу данних (слот 1)
+		bld toutreg, slot1tint	;ГўГЁГЄГ«ГЁГЄ ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬ГЁ ГЇГҐГ°ГҐГ­Г®Г±Гі Г¤Г Г­Г­ГЁГµ (Г±Г«Г®ГІ 1)
 
  dsproces3:	pop reg2
 		pop reg1
@@ -1791,7 +1792,7 @@ dsproces21:sts tempods, reg1
 dbteds:	
 .db		0,0,1,1,2,3,3,4,5,5,6,6,7,8,8,9
 
-getcrc8:push xl			;програма розрахунку CRC8
+getcrc8:push xl			;ГЇГ°Г®ГЈГ°Г Г¬Г  Г°Г®Г§Г°Г ГµГіГ­ГЄГі CRC8
 		push xh
 		push zl
 		push zh
@@ -1801,14 +1802,14 @@ getcrc8:push xl			;програма розрахунку CRC8
 		ldi reg2, 0
 		ldi xh, high(dscommbuf0)
 		ldi xl, low(dscommbuf0)
-getcrc81:ld tmp, x+			;байт данних з буфера
-		eor reg1, tmp		;ксорим актуальне значення CRC на дані з буфера
+getcrc81:ld tmp, x+			;ГЎГ Г©ГІ Г¤Г Г­Г­ГЁГµ Г§ ГЎГіГґГҐГ°Г 
+		eor reg1, tmp		;ГЄГ±Г®Г°ГЁГ¬ Г ГЄГІГіГ Г«ГјГ­ГҐ Г§Г­Г Г·ГҐГ­Г­Гї CRC Г­Г  Г¤Г Г­Ві Г§ ГЎГіГґГҐГ°Г 
 		ldi zh, high(2*dbcrc8)
 		ldi zl, low(2*dbcrc8)
-		add zl, reg1		;отримане значення використовується як індекс
+		add zl, reg1		;Г®ГІГ°ГЁГ¬Г Г­ГҐ Г§Г­Г Г·ГҐГ­Г­Гї ГўГЁГЄГ®Г°ГЁГ±ГІГ®ГўГіВєГІГјГ±Гї ГїГЄ ВіГ­Г¤ГҐГЄГ±
 		ldi tmp, 0
 		adc zh, tmp
-		lpm reg1, z			;з таблиці отримується нове значення CRC
+		lpm reg1, z			;Г§ ГІГ ГЎГ«ГЁГ¶Ві Г®ГІГ°ГЁГ¬ГіВєГІГјГ±Гї Г­Г®ГўГҐ Г§Г­Г Г·ГҐГ­Г­Гї CRC
 		inc reg2
 		cpi reg2, 8
 		brne getcrc81
@@ -1819,7 +1820,7 @@ getcrc81:ld tmp, x+			;байт данних з буфера
 		set
 		rjmp getcrc83
 getcrc82:clt
-getcrc83:bld reg2, 1	;виставляється відповідний біт (CRC правельне/неправельне)
+getcrc83:bld reg2, 1	;ГўГЁГ±ГІГ ГўГ«ГїВєГІГјГ±Гї ГўВіГ¤ГЇГ®ГўВіГ¤Г­ГЁГ© ГЎВіГІ (CRC ГЇГ°Г ГўГҐГ«ГјГ­ГҐ/Г­ГҐГЇГ°Г ГўГҐГ«ГјГ­ГҐ)
 		sts dscommfreg, reg2
 		pop reg2
 		pop reg1
@@ -1830,7 +1831,7 @@ getcrc83:bld reg2, 1	;виставляється відповідний біт (CRC правельне/неправельне)
 		ret
 
 dbcrc8:
-.db		0,94,188,226,97,63,221,131,194,156,126,32,163,253,31,65	;таблиця для CRC8
+.db		0,94,188,226,97,63,221,131,194,156,126,32,163,253,31,65	;ГІГ ГЎГ«ГЁГ¶Гї Г¤Г«Гї CRC8
 .db		157,195,33,127,252,162,64,30,95,1,227,189,62,96,130,220
 .db		35,125,159,193,66,28,254,160,225,191,93,3,128,222,60,98
 .db		190,224,2,92,223,129,99,61,124,34,192,158,29,67,161,255
@@ -1847,17 +1848,17 @@ dbcrc8:
 .db		233,183,85,11,136,214,52,106,43,117,151,201,74,20,246,168
 .db		116,42,200,150,21,75,169,247,182,232,10,84,215,137,107,53
 
-w1st:	push reg7	;Фрейм ресету, при відсутності відповіді від датчика виставляє 0 біт в sdcommfreg
+w1st:	push reg7	;Г”Г°ГҐГ©Г¬ Г°ГҐГ±ГҐГІГі, ГЇГ°ГЁ ГўВіГ¤Г±ГіГІГ­Г®Г±ГІВі ГўВіГ¤ГЇГ®ГўВіГ¤Ві ГўВіГ¤ Г¤Г ГІГ·ГЁГЄГ  ГўГЁГ±ГІГ ГўГ«ГїВє 0 ГЎВіГІ Гў sdcommfreg
 		push reg8
-		cbi ddrb, 6	;для контролю відпускається лінія 1W
-		rcall dlw4	;затримка на відновлення лінії
+		cbi ddrb, 6	;Г¤Г«Гї ГЄГ®Г­ГІГ°Г®Г«Гѕ ГўВіГ¤ГЇГіГ±ГЄГ ВєГІГјГ±Гї Г«ВіГ­ВіГї 1W
+		rcall dlw4	;Г§Г ГІГ°ГЁГ¬ГЄГ  Г­Г  ГўВіГ¤Г­Г®ГўГ«ГҐГ­Г­Гї Г«ВіГ­ВіВї
 		in tmp, pinb	
-		bst tmp, 6	;якщо на піні 0 - лінія закорочена
+		bst tmp, 6	;ГїГЄГ№Г® Г­Г  ГЇВіГ­Ві 0 - Г«ВіГ­ВіГї Г§Г ГЄГ®Г°Г®Г·ГҐГ­Г 
 		brts w1st2
 		set
 		rjmp w1st3		
 w1st2:	clt		
-w1st3:	lds tmp, dscommfreg	;встановлюється або очищається біт КЗ датчика
+w1st3:	lds tmp, dscommfreg	;ГўГ±ГІГ Г­Г®ГўГ«ГѕВєГІГјГ±Гї Г ГЎГ® Г®Г·ГЁГ№Г ВєГІГјГ±Гї ГЎВіГІ ГЉГ‡ Г¤Г ГІГ·ГЁГЄГ 
 		bld tmp, 2
 		sts dscommfreg, tmp
 		cbi portb, 6 
@@ -1871,14 +1872,14 @@ w1st3:	lds tmp, dscommfreg	;встановлюється або очищається біт КЗ датчика
 		clt
 		rjmp w1stex		
 w1st1:	set		
-w1stex:	lds tmp, dscommfreg	;встановлюється або очищається біт відповіді на ресет датчика
+w1stex:	lds tmp, dscommfreg	;ГўГ±ГІГ Г­Г®ГўГ«ГѕВєГІГјГ±Гї Г ГЎГ® Г®Г·ГЁГ№Г ВєГІГјГ±Гї ГЎВіГІ ГўВіГ¤ГЇГ®ГўВіГ¤Ві Г­Г  Г°ГҐГ±ГҐГІ Г¤Г ГІГ·ГЁГЄГ 
 		bld tmp, 0
 		sts dscommfreg, tmp
 		pop reg8
 		pop reg7		
 		ret
 
-w1tx:	push reg5	;Фрейм відправки байта, обмін через w1buf
+w1tx:	push reg5	;Г”Г°ГҐГ©Г¬ ГўВіГ¤ГЇГ°Г ГўГЄГЁ ГЎГ Г©ГІГ , Г®ГЎГ¬ВіГ­ Г·ГҐГ°ГҐГ§ w1buf
 		push reg6
 		push reg7
 		push reg8
@@ -1902,7 +1903,7 @@ w1tx1:	rcall dlw70
 		pop reg5
 		ret
 
-w1rx:	push reg5	;Фрейм прийому байта, обмін через w1buf
+w1rx:	push reg5	;Г”Г°ГҐГ©Г¬ ГЇГ°ГЁГ©Г®Г¬Гі ГЎГ Г©ГІГ , Г®ГЎГ¬ВіГ­ Г·ГҐГ°ГҐГ§ w1buf
 		push reg6
 		push reg7
 		push reg8
@@ -1946,7 +1947,7 @@ dlw701:	dec reg7
 		dec reg8
 		brne dlw702	
 		ret
-dlw9:	ldi reg8, 20 ;22 змінено на 20
+dlw9:	ldi reg8, 20 ;22 Г§Г¬ВіГ­ГҐГ­Г® Г­Г  20
 dlw91:	dec reg8
 		brne dlw91
 		ret
@@ -1963,18 +1964,18 @@ startdscomm:ldi tmp, 0
 		sts w1dvcount, tmp
 		ret
 
-stopdscomm:ldi tmp, 255		;якщо 255 то програма обміну з датчиком блокується
+stopdscomm:ldi tmp, 255		;ГїГЄГ№Г® 255 ГІГ® ГЇГ°Г®ГЈГ°Г Г¬Г  Г®ГЎГ¬ВіГ­Гі Г§ Г¤Г ГІГ·ГЁГЄГ®Г¬ ГЎГ«Г®ГЄГіВєГІГјГ±Гї
 		sts dscommsteph, tmp
 		cbi portb, 6
 		cbi ddrb, 6
 		clt
-		bld gereg1, dsdtv	;скинути біт що дані від датчика дійсні
+		bld gereg1, dsdtv	;Г±ГЄГЁГ­ГіГІГЁ ГЎВіГІ Г№Г® Г¤Г Г­Ві ГўВіГ¤ Г¤Г ГІГ·ГЁГЄГ  Г¤ВіГ©Г±Г­Ві
 
 		ret
 
 .equ	dscommstepl = $125
 .equ	dscommsteph = $126
-.equ	dscommfreg = $127	;Регістр прапорців 0 - помилка відповіді від датчика після ресету 1, 1 - помилка CRC8, 2 - КЗ,
+.equ	dscommfreg = $127	;ГђГҐГЈВіГ±ГІГ° ГЇГ°Г ГЇГ®Г°Г¶ВіГў 0 - ГЇГ®Г¬ГЁГ«ГЄГ  ГўВіГ¤ГЇГ®ГўВіГ¤Ві ГўВіГ¤ Г¤Г ГІГ·ГЁГЄГ  ГЇВіГ±Г«Гї Г°ГҐГ±ГҐГІГі 1, 1 - ГЇГ®Г¬ГЁГ«ГЄГ  CRC8, 2 - ГЉГ‡,
 .equ	dscommbuf0 = $128
 .equ	dscommbuf1 = $129
 .equ	dscommbuf2 = $12a
@@ -1984,13 +1985,13 @@ stopdscomm:ldi tmp, 255		;якщо 255 то програма обміну з датчиком блокується
 .equ	dscommbuf6 = $12e
 .equ	dscommbuf7 = $12f
 .equ	dscommcrc = $130
-.equ	tempuni = $131	;цілі градусів
-.equ	temppar = $132	;десяті градусів
-.equ	tempods = $133	;одиниці градусів, поки не використовується - зарезервовано адрес
-.equ	tempdes = $134	;десятки градусів, поки не використовується - зарезервовано адрес
-.equ	w1buf = $135	;буфер 1wire
-.equ	w1ercount = $136 ;рахунок кількості помилок передачі данних, після 3 в gereg1 виставляються біти помилок
-.equ	w1dvcount = $137 ;рахунок правельних зчитувань, після другого правельного зчитування дані вважаються дійсими	
+.equ	tempuni = $131	;Г¶ВіГ«Ві ГЈГ°Г Г¤ГіГ±ВіГў
+.equ	temppar = $132	;Г¤ГҐГ±ГїГІВі ГЈГ°Г Г¤ГіГ±ВіГў
+.equ	tempods = $133	;Г®Г¤ГЁГ­ГЁГ¶Ві ГЈГ°Г Г¤ГіГ±ВіГў, ГЇГ®ГЄГЁ Г­ГҐ ГўГЁГЄГ®Г°ГЁГ±ГІГ®ГўГіВєГІГјГ±Гї - Г§Г Г°ГҐГ§ГҐГ°ГўГ®ГўГ Г­Г® Г Г¤Г°ГҐГ±
+.equ	tempdes = $134	;Г¤ГҐГ±ГїГІГЄГЁ ГЈГ°Г Г¤ГіГ±ВіГў, ГЇГ®ГЄГЁ Г­ГҐ ГўГЁГЄГ®Г°ГЁГ±ГІГ®ГўГіВєГІГјГ±Гї - Г§Г Г°ГҐГ§ГҐГ°ГўГ®ГўГ Г­Г® Г Г¤Г°ГҐГ±
+.equ	w1buf = $135	;ГЎГіГґГҐГ° 1wire
+.equ	w1ercount = $136 ;Г°Г ГµГіГ­Г®ГЄ ГЄВіГ«ГјГЄГ®Г±ГІВі ГЇГ®Г¬ГЁГ«Г®ГЄ ГЇГҐГ°ГҐГ¤Г Г·Ві Г¤Г Г­Г­ГЁГµ, ГЇВіГ±Г«Гї 3 Гў gereg1 ГўГЁГ±ГІГ ГўГ«ГїГѕГІГјГ±Гї ГЎВіГІГЁ ГЇГ®Г¬ГЁГ«Г®ГЄ
+.equ	w1dvcount = $137 ;Г°Г ГµГіГ­Г®ГЄ ГЇГ°Г ГўГҐГ«ГјГ­ГЁГµ Г§Г·ГЁГІГіГўГ Г­Гј, ГЇВіГ±Г«Гї Г¤Г°ГіГЈГ®ГЈГ® ГЇГ°Г ГўГҐГ«ГјГ­Г®ГЈГ® Г§Г·ГЁГІГіГўГ Г­Г­Гї Г¤Г Г­Ві ГўГўГ Г¦Г ГѕГІГјГ±Гї Г¤ВіГ©Г±ГЁГ¬ГЁ	
 
 ;_________________________________________ Beep'er (sound gen) Control___________________________________________________________________________
 
@@ -2007,36 +2008,36 @@ beepctr:push reg1
 		brsh beepctr1
 		sts beepftckl, tmp
 		rjmp beepctre		
-beepctr1:ldi tmp, 0			;виконання програми кожен 4-й цикл таймера
+beepctr1:ldi tmp, 0			;ГўГЁГЄГ®Г­Г Г­Г­Гї ГЇГ°Г®ГЈГ°Г Г¬ГЁ ГЄГ®Г¦ГҐГ­ 4-Г© Г¶ГЁГЄГ« ГІГ Г©Г¬ГҐГ°Г 
 		sts beepftckl, tmp
 
-		lds reg1, beepnck	;нециклічні звукові сигнали
+		lds reg1, beepnck	;Г­ГҐГ¶ГЁГЄГ«ВіГ·Г­Ві Г§ГўГіГЄГ®ГўВі Г±ГЁГЈГ­Г Г«ГЁ
 		lds tmp, beepncktemp
-		cp reg1, tmp		;перевірка чи не змінився номер сигналу
+		cp reg1, tmp		;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­ГҐ Г§Г¬ВіГ­ГЁГўГ±Гї Г­Г®Г¬ГҐГ° Г±ГЁГЈГ­Г Г«Гі
 		breq beepctr11
 		sts beepncktemp, reg1
 		ldi tmp, 0
 		sts beepnckstep, tmp
 		sts beepnckcount, tmp
-beepctr11:cpi reg1, 0		;якщо нуль, то сигнал вимкнено
+beepctr11:cpi reg1, 0		;ГїГЄГ№Г® Г­ГіГ«Гј, ГІГ® Г±ГЁГЈГ­Г Г« ГўГЁГ¬ГЄГ­ГҐГ­Г®
 		brne beepctr12
 		lds tmp, beepfreg
 		clt
 		bld tmp, 2
 		bld tmp, 3
 		sts beepfreg, tmp
-		rjmp beepctr2		;перехід до програми циклічних звукових сигналів
+		rjmp beepctr2		;ГЇГҐГ°ГҐГµВіГ¤ Г¤Г® ГЇГ°Г®ГЈГ°Г Г¬ГЁ Г¶ГЁГЄГ«ВіГ·Г­ГЁГµ Г§ГўГіГЄГ®ГўГЁГµ Г±ГЁГЈГ­Г Г«ВіГў
 beepctr12:lds reg2, beepnckcount
-		cpi reg2, 0			;перевірка чи виконаний крок звукової послідовності
+		cpi reg2, 0			;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГўГЁГЄГ®Г­Г Г­ГЁГ© ГЄГ°Г®ГЄ Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
 		breq beepctr13
 		dec reg2
-		cpi reg2, 0			;перевірка чи виконаний крок звукової послідовності
+		cpi reg2, 0			;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГўГЁГЄГ®Г­Г Г­ГЁГ© ГЄГ°Г®ГЄ Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
 		breq beepctr13
 		sts beepnckcount, reg2
 		rjmp beepctr2
 beepctr13:dec reg1
-		lsl reg1	;в reg1 зберігається номер сигналу *2		
-		ldi zh, high(2*dwbeepnck) ;вибір потрібної бази по номеру сигналу
+		lsl reg1	;Гў reg1 Г§ГЎГҐГ°ВіГЈГ ВєГІГјГ±Гї Г­Г®Г¬ГҐГ° Г±ГЁГЈГ­Г Г«Гі *2		
+		ldi zh, high(2*dwbeepnck) ;ГўГЁГЎВіГ° ГЇГ®ГІГ°ВіГЎГ­Г®Вї ГЎГ Г§ГЁ ГЇГ® Г­Г®Г¬ГҐГ°Гі Г±ГЁГЈГ­Г Г«Гі
 		ldi zl, low(2*dwbeepnck)
 		add zl, reg1
 		clr tmp
@@ -2044,14 +2045,14 @@ beepctr13:dec reg1
 		lpm r0, z+
 		lpm r1, z
 		movw zh:zl,r1:r0
-		lds reg1, beepnckstep	;автоматичний інкремент номера кроку
+		lds reg1, beepnckstep	;Г ГўГІГ®Г¬Г ГІГЁГ·Г­ГЁГ© ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г­Г®Г¬ГҐГ°Г  ГЄГ°Г®ГЄГі
 		inc reg1	
 		sts beepnckstep, reg1			
 		add zl, reg1
 		clr tmp
 		adc zh, tmp
 		lpm tmp, z
-		cpi tmp, 255	;перевірка чи звукова послідовність завершена
+		cpi tmp, 255	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г§ГўГіГЄГ®ГўГ  ГЇГ®Г±Г«ВіГ¤Г®ГўГ­ВіГ±ГІГј Г§Г ГўГҐГ°ГёГҐГ­Г 
 		brne beepctr14
 		lds tmp, beepfreg
 		clt 
@@ -2059,13 +2060,13 @@ beepctr13:dec reg1
 		bld tmp, 3
 		sts beepfreg, tmp
 		clr tmp
-		sts beepnck, tmp ;оскільки звукова послідовніть відтворена - записується 0
+		sts beepnck, tmp ;Г®Г±ГЄВіГ«ГјГЄГЁ Г§ГўГіГЄГ®ГўГ  ГЇГ®Г±Г«ВіГ¤Г®ГўГ­ВіГІГј ГўВіГ¤ГІГўГ®Г°ГҐГ­Г  - Г§Г ГЇГЁГ±ГіВєГІГјГ±Гї 0
 		sts beepnckstep, tmp
 		sts beepnckcount, tmp
 		rjmp beepctr2
 beepctr14:cpi tmp, 100
-		brlo beepctr15	;якщо більше 100 то на період часу динамік ввімкнено
-		subi tmp, 100	;індикаторне число 100 віднімається
+		brlo beepctr15	;ГїГЄГ№Г® ГЎВіГ«ГјГёГҐ 100 ГІГ® Г­Г  ГЇГҐГ°ВіГ®Г¤ Г·Г Г±Гі Г¤ГЁГ­Г Г¬ВіГЄ ГўГўВіГ¬ГЄГ­ГҐГ­Г®
+		subi tmp, 100	;ВіГ­Г¤ГЁГЄГ ГІГ®Г°Г­ГҐ Г·ГЁГ±Г«Г® 100 ГўВіГ¤Г­ВіГ¬Г ВєГІГјГ±Гї
 		sts beepnckcount, tmp
 		lds tmp, beepfreg
 		set 
@@ -2081,32 +2082,32 @@ beepctr15:sts beepnckcount, tmp
 		bld tmp, 3
 		sts beepfreg, tmp
 
-beepctr2:lds reg1, beepckl	;циклічні звукові сигнали
+beepctr2:lds reg1, beepckl	;Г¶ГЁГЄГ«ВіГ·Г­Ві Г§ГўГіГЄГ®ГўВі Г±ГЁГЈГ­Г Г«ГЁ
 		lds tmp, beepckltemp
-		cp reg1, tmp		;перевірка чи не змінився номер сигналу
+		cp reg1, tmp		;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­ГҐ Г§Г¬ВіГ­ГЁГўГ±Гї Г­Г®Г¬ГҐГ° Г±ГЁГЈГ­Г Г«Гі
 		breq beepctr21
 		sts beepckltemp, reg1
 		ldi tmp, 0
 		sts beepcklstep, tmp
 		sts beepcklcount, tmp
-beepctr21:cpi reg1, 0		;якщо нуль, то сигнал вимкнено
+beepctr21:cpi reg1, 0		;ГїГЄГ№Г® Г­ГіГ«Гј, ГІГ® Г±ГЁГЈГ­Г Г« ГўГЁГ¬ГЄГ­ГҐГ­Г®
 		brne beepctr22
 		lds tmp, beepfreg
 		clt
 		bld tmp, 4
 		sts beepfreg, tmp
-		rjmp beepctr3		;перехід до програми зведення
+		rjmp beepctr3		;ГЇГҐГ°ГҐГµВіГ¤ Г¤Г® ГЇГ°Г®ГЈГ°Г Г¬ГЁ Г§ГўГҐГ¤ГҐГ­Г­Гї
 beepctr22:lds reg2, beepcklcount
-		cpi reg2, 0			;перевірка чи виконаний крок звукової послідовності
+		cpi reg2, 0			;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГўГЁГЄГ®Г­Г Г­ГЁГ© ГЄГ°Г®ГЄ Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
 		breq beepctr23
 		dec reg2
-		cpi reg2, 0			;перевірка чи виконаний крок звукової послідовності
+		cpi reg2, 0			;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГўГЁГЄГ®Г­Г Г­ГЁГ© ГЄГ°Г®ГЄ Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
 		breq beepctr23
 		sts beepcklcount, reg2
 		rjmp beepctr3
 beepctr23:dec reg1
-		lsl reg1	;в reg1 зберігається номер сигналу *2		
-		ldi zh, high(2*dwbeepckl) ;вибір потрібної бази по номеру сигналу
+		lsl reg1	;Гў reg1 Г§ГЎГҐГ°ВіГЈГ ВєГІГјГ±Гї Г­Г®Г¬ГҐГ° Г±ГЁГЈГ­Г Г«Гі *2		
+		ldi zh, high(2*dwbeepckl) ;ГўГЁГЎВіГ° ГЇГ®ГІГ°ВіГЎГ­Г®Вї ГЎГ Г§ГЁ ГЇГ® Г­Г®Г¬ГҐГ°Гі Г±ГЁГЈГ­Г Г«Гі
 		ldi zl, low(2*dwbeepckl)
 		add zl, reg1
 		clr tmp
@@ -2114,22 +2115,22 @@ beepctr23:dec reg1
 		lpm r0, z+
 		lpm r1, z
 		movw zh:zl,r1:r0
-		lds reg1, beepcklstep	;автоматичний інкремент номера кроку
+		lds reg1, beepcklstep	;Г ГўГІГ®Г¬Г ГІГЁГ·Г­ГЁГ© ВіГ­ГЄГ°ГҐГ¬ГҐГ­ГІ Г­Г®Г¬ГҐГ°Г  ГЄГ°Г®ГЄГі
 		inc reg1	
 		sts beepcklstep, reg1			
 		add zl, reg1
 		clr tmp
 		adc zh, tmp
 		lpm tmp, z
-		cpi tmp, 255	;перевірка чи звукова послідовність завершена
+		cpi tmp, 255	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г§ГўГіГЄГ®ГўГ  ГЇГ®Г±Г«ВіГ¤Г®ГўГ­ВіГ±ГІГј Г§Г ГўГҐГ°ГёГҐГ­Г 
 		brne beepctr24
 		clr tmp
-		sts beepcklstep, tmp ;звукова послідовніть відтворюється повторно
+		sts beepcklstep, tmp ;Г§ГўГіГЄГ®ГўГ  ГЇГ®Г±Г«ВіГ¤Г®ГўГ­ВіГІГј ГўВіГ¤ГІГўГ®Г°ГѕВєГІГјГ±Гї ГЇГ®ГўГІГ®Г°Г­Г®
 		sts beepcklcount, tmp
 		rjmp beepctr3
 beepctr24:cpi tmp, 100
-		brlo beepctr25	;якщо більше 100 то на період часу динамік ввімкнено
-		subi tmp, 100	;індикаторне число 100 віднімається
+		brlo beepctr25	;ГїГЄГ№Г® ГЎВіГ«ГјГёГҐ 100 ГІГ® Г­Г  ГЇГҐГ°ВіГ®Г¤ Г·Г Г±Гі Г¤ГЁГ­Г Г¬ВіГЄ ГўГўВіГ¬ГЄГ­ГҐГ­Г®
+		subi tmp, 100	;ВіГ­Г¤ГЁГЄГ ГІГ®Г°Г­ГҐ Г·ГЁГ±Г«Г® 100 ГўВіГ¤Г­ВіГ¬Г ВєГІГјГ±Гї
 		sts beepcklcount, tmp
 		lds tmp, beepfreg
 		set 
@@ -2144,19 +2145,19 @@ beepctr25:sts beepcklcount, tmp
 
 beepctr3:lds tmp, beepfreg
 		bst tmp, 0
-		brts beepctr35	;якщо нециклічні звукові сигнали приглушені то зразу перехід до циклічних
+		brts beepctr35	;ГїГЄГ№Г® Г­ГҐГ¶ГЁГЄГ«ВіГ·Г­Ві Г§ГўГіГЄГ®ГўВі Г±ГЁГЈГ­Г Г«ГЁ ГЇГ°ГЁГЈГ«ГіГёГҐГ­Ві ГІГ® Г§Г°Г Г§Гі ГЇГҐГ°ГҐГµВіГ¤ Г¤Г® Г¶ГЁГЄГ«ВіГ·Г­ГЁГµ
 		bst tmp, 2
-		brtc beepctr35	;якщо модулятор нециклічних звукові сигналів вимкнено то зразу перехід до циклічних
+		brtc beepctr35	;ГїГЄГ№Г® Г¬Г®Г¤ГіГ«ГїГІГ®Г° Г­ГҐГ¶ГЁГЄГ«ВіГ·Г­ГЁГµ Г§ГўГіГЄГ®ГўВі Г±ГЁГЈГ­Г Г«ВіГў ГўГЁГ¬ГЄГ­ГҐГ­Г® ГІГ® Г§Г°Г Г§Гі ГЇГҐГ°ГҐГµВіГ¤ Г¤Г® Г¶ГЁГЄГ«ВіГ·Г­ГЁГµ
 		bst tmp, 3
-		brtc beepctr31	;перевірка чи динамік ввімкнено
+		brtc beepctr31	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г¤ГЁГ­Г Г¬ВіГЄ ГўГўВіГ¬ГЄГ­ГҐГ­Г®
 		sbi porta, 1
 		rjmp beepctre
 beepctr31:cbi porta, 1
 		rjmp beepctre
 beepctr35:bst tmp, 1
-		brts beepctr36	;якщо циклічні звукові сигнали приглушені то вимкнення динаміка і вихід
+		brts beepctr36	;ГїГЄГ№Г® Г¶ГЁГЄГ«ВіГ·Г­Ві Г§ГўГіГЄГ®ГўВі Г±ГЁГЈГ­Г Г«ГЁ ГЇГ°ГЁГЈГ«ГіГёГҐГ­Ві ГІГ® ГўГЁГ¬ГЄГ­ГҐГ­Г­Гї Г¤ГЁГ­Г Г¬ВіГЄГ  Ві ГўГЁГµВіГ¤
 		bst tmp, 4
-		brtc beepctr37	;перевірка чи динамік ввімкнено
+		brtc beepctr37	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г¤ГЁГ­Г Г¬ВіГЄ ГўГўВіГ¬ГЄГ­ГҐГ­Г®
 		sbi porta, 1
 		rjmp beepctre
 beepctr37:cbi porta, 1
@@ -2208,23 +2209,23 @@ dbbeepckl4:
 .db		0,199,255,0
 
 
-.equ	beepnck = $11a		;нециклічні звукові сигнали @1 - 1 короткий звук,		 ;вищий пріоритет
-							;@2 - 2 коротких звуки, @3 - 3 коротких звуки, 
-							;@4 - 4 коротких звуки + 1 довгий, @5 - 1 довгий,
-							;@6 - 2 довгих.
-.equ	beepncktemp = $11b	;тимчасовий регістр нециклічних звукових сигналів
-.equ	beepnckstep = $11c	;крок звукової послідовності
-.equ	beepnckcount = $122	;рахунок часу звукової послідовності
-.equ	beepckl = $11d		;циклічні звукові сигнали @1 - 1 секунда на 15 секунд,	 ;нижчий пріоритет
-							;@2 - 2 секунди на 10 секунд, @3 - 3 секунди на 3 секунд,
-							;@4 - непреривний звуковий сигнал.
-.equ	beepckltemp = $11e	;тимчасовий регістр циклічних звукових сигналів
-.equ	beepcklstep = $11f	;крок звукової послідовності
-.equ	beepcklcount = $123	;рахунок часу звукової послідовності
-.equ	beepfreg = $120		;регістр прапорців модулятора @0 - приглушення нециклічних звукових сигналів,
-							;@1 - приглушення циклічних звукових сигналів, @2 - модулятор нцл. зв. сиг. ввімкнений
-							;@3 - нцл. зв. сиг. динамік - ввімкнений, @4 - циклічн. зв. сиг. динамік - ввімкнений
-.equ	beepftckl = $121	;регістр рахунку циклів швидкого таймера (програма модулятора виконується кожен 4-й цикл)
+.equ	beepnck = $11a		;Г­ГҐГ¶ГЁГЄГ«ВіГ·Г­Ві Г§ГўГіГЄГ®ГўВі Г±ГЁГЈГ­Г Г«ГЁ @1 - 1 ГЄГ®Г°Г®ГІГЄГЁГ© Г§ГўГіГЄ,		 ;ГўГЁГ№ГЁГ© ГЇГ°ВіГ®Г°ГЁГІГҐГІ
+							;@2 - 2 ГЄГ®Г°Г®ГІГЄГЁГµ Г§ГўГіГЄГЁ, @3 - 3 ГЄГ®Г°Г®ГІГЄГЁГµ Г§ГўГіГЄГЁ, 
+							;@4 - 4 ГЄГ®Г°Г®ГІГЄГЁГµ Г§ГўГіГЄГЁ + 1 Г¤Г®ГўГЈГЁГ©, @5 - 1 Г¤Г®ГўГЈГЁГ©,
+							;@6 - 2 Г¤Г®ГўГЈГЁГµ.
+.equ	beepncktemp = $11b	;ГІГЁГ¬Г·Г Г±Г®ГўГЁГ© Г°ГҐГЈВіГ±ГІГ° Г­ГҐГ¶ГЁГЄГ«ВіГ·Г­ГЁГµ Г§ГўГіГЄГ®ГўГЁГµ Г±ГЁГЈГ­Г Г«ВіГў
+.equ	beepnckstep = $11c	;ГЄГ°Г®ГЄ Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
+.equ	beepnckcount = $122	;Г°Г ГµГіГ­Г®ГЄ Г·Г Г±Гі Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
+.equ	beepckl = $11d		;Г¶ГЁГЄГ«ВіГ·Г­Ві Г§ГўГіГЄГ®ГўВі Г±ГЁГЈГ­Г Г«ГЁ @1 - 1 Г±ГҐГЄГіГ­Г¤Г  Г­Г  15 Г±ГҐГЄГіГ­Г¤,	 ;Г­ГЁГ¦Г·ГЁГ© ГЇГ°ВіГ®Г°ГЁГІГҐГІ
+							;@2 - 2 Г±ГҐГЄГіГ­Г¤ГЁ Г­Г  10 Г±ГҐГЄГіГ­Г¤, @3 - 3 Г±ГҐГЄГіГ­Г¤ГЁ Г­Г  3 Г±ГҐГЄГіГ­Г¤,
+							;@4 - Г­ГҐГЇГ°ГҐГ°ГЁГўГ­ГЁГ© Г§ГўГіГЄГ®ГўГЁГ© Г±ГЁГЈГ­Г Г«.
+.equ	beepckltemp = $11e	;ГІГЁГ¬Г·Г Г±Г®ГўГЁГ© Г°ГҐГЈВіГ±ГІГ° Г¶ГЁГЄГ«ВіГ·Г­ГЁГµ Г§ГўГіГЄГ®ГўГЁГµ Г±ГЁГЈГ­Г Г«ВіГў
+.equ	beepcklstep = $11f	;ГЄГ°Г®ГЄ Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
+.equ	beepcklcount = $123	;Г°Г ГµГіГ­Г®ГЄ Г·Г Г±Гі Г§ГўГіГЄГ®ГўГ®Вї ГЇГ®Г±Г«ВіГ¤Г®ГўГ­Г®Г±ГІВі
+.equ	beepfreg = $120		;Г°ГҐГЈВіГ±ГІГ° ГЇГ°Г ГЇГ®Г°Г¶ВіГў Г¬Г®Г¤ГіГ«ГїГІГ®Г°Г  @0 - ГЇГ°ГЁГЈГ«ГіГёГҐГ­Г­Гї Г­ГҐГ¶ГЁГЄГ«ВіГ·Г­ГЁГµ Г§ГўГіГЄГ®ГўГЁГµ Г±ГЁГЈГ­Г Г«ВіГў,
+							;@1 - ГЇГ°ГЁГЈГ«ГіГёГҐГ­Г­Гї Г¶ГЁГЄГ«ВіГ·Г­ГЁГµ Г§ГўГіГЄГ®ГўГЁГµ Г±ГЁГЈГ­Г Г«ВіГў, @2 - Г¬Г®Г¤ГіГ«ГїГІГ®Г° Г­Г¶Г«. Г§Гў. Г±ГЁГЈ. ГўГўВіГ¬ГЄГ­ГҐГ­ГЁГ©
+							;@3 - Г­Г¶Г«. Г§Гў. Г±ГЁГЈ. Г¤ГЁГ­Г Г¬ВіГЄ - ГўГўВіГ¬ГЄГ­ГҐГ­ГЁГ©, @4 - Г¶ГЁГЄГ«ВіГ·Г­. Г§Гў. Г±ГЁГЈ. Г¤ГЁГ­Г Г¬ВіГЄ - ГўГўВіГ¬ГЄГ­ГҐГ­ГЁГ©
+.equ	beepftckl = $121	;Г°ГҐГЈВіГ±ГІГ° Г°Г ГµГіГ­ГЄГі Г¶ГЁГЄГ«ВіГў ГёГўГЁГ¤ГЄГ®ГЈГ® ГІГ Г©Г¬ГҐГ°Г  (ГЇГ°Г®ГЈГ°Г Г¬Г  Г¬Г®Г¤ГіГ«ГїГІГ®Г°Г  ГўГЁГЄГ®Г­ГіВєГІГјГ±Гї ГЄГ®Г¦ГҐГ­ 4-Г© Г¶ГЁГЄГ«)
 
 beepstart:ldi tmp, 0
 		sts beepnck, tmp
@@ -2253,7 +2254,7 @@ beepstop:lds tmp, beepfreg
 
 ;_____________________________________________ Dinamic ind Control_______________________________________________________________________________
 
-fpdimm:	sbi porta, 4 ;дімінг передньої панелі
+fpdimm:	sbi porta, 4 ;Г¤ВіГ¬ВіГ­ГЈ ГЇГҐГ°ГҐГ¤Г­ГјГ®Вї ГЇГ Г­ГҐГ«Ві
 		sbi porta, 2
 		sbi porta, 0
 		sbi portd, 3
@@ -2261,7 +2262,7 @@ fpdimm:	sbi porta, 4 ;дімінг передньої панелі
 
 dind:	push reg1
 		lds reg1, lednum
-		cpi reg1, 255		;якщо 255 - динамічна індикація вимкнута
+		cpi reg1, 255		;ГїГЄГ№Г® 255 - Г¤ГЁГ­Г Г¬ВіГ·Г­Г  ВіГ­Г¤ГЁГЄГ Г¶ВіГї ГўГЁГ¬ГЄГ­ГіГІГ 
 		brne dind8
 		rjmp dinde
 dind8:	inc reg1
@@ -2303,7 +2304,7 @@ dinde:	pop reg1
 .equ	seg2buf = $117
 .equ	seg3buf = $118
 .equ	fpledbuf = $119
-;.equ	fpdimmlevel = $10f;дана перемінна задається задається в MAIN
+;.equ	fpdimmlevel = $10f;Г¤Г Г­Г  ГЇГҐГ°ГҐГ¬ВіГ­Г­Г  Г§Г Г¤Г ВєГІГјГ±Гї Г§Г Г¤Г ВєГІГјГ±Гї Гў MAIN
 
 
 txreg:	push reg1
@@ -2344,7 +2345,7 @@ startdind:ldi tmp, 1
 		ldi tmp, 0b11111101
 		sts fpledbuf, tmp
 		cbi portd, 6
-fpdimmadj:push zl		;встановлення яскравості передньої панелі 0...5
+fpdimmadj:push zl		;ГўГ±ГІГ Г­Г®ГўГ«ГҐГ­Г­Гї ГїГ±ГЄГ°Г ГўГ®Г±ГІВі ГЇГҐГ°ГҐГ¤Г­ГјГ®Вї ГЇГ Г­ГҐГ«Ві 0...5
 		push zh
 		lds tmp, fpdimmlevel
 		ldi zh, high(2*dbfpdimm)
@@ -2375,7 +2376,7 @@ dbfpdimm:
 
 ;_____________________________________________ Keyboard Control____________________________________________________________________________________________
 
-keyask:	push reg1	;підпрограма опитування клавіатури
+keyask:	push reg1	;ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬Г  Г®ГЇГЁГІГіГўГ Г­Г­Гї ГЄГ«Г ГўВіГ ГІГіГ°ГЁ
 		push reg2
 
 		ldi reg1, 0
@@ -2399,21 +2400,21 @@ keyask:	push reg1	;підпрограма опитування клавіатури
 		ldi reg1, 6
 
 		lds tmp, key
-		cpi tmp, 0	;якщо нуль то на перевірку натискання
+		cpi tmp, 0	;ГїГЄГ№Г® Г­ГіГ«Гј ГІГ® Г­Г  ГЇГҐГ°ГҐГўВіГ°ГЄГі Г­Г ГІГЁГ±ГЄГ Г­Г­Гї
 		breq keyask1
-		cpi tmp, 100;якщо 100 то на перевірку відпускання клавіші або обробку мультипресу
+		cpi tmp, 100;ГїГЄГ№Г® 100 ГІГ® Г­Г  ГЇГҐГ°ГҐГўВіГ°ГЄГі ГўВіГ¤ГЇГіГ±ГЄГ Г­Г­Гї ГЄГ«Г ГўВіГёВі Г ГЎГ® Г®ГЎГ°Г®ГЎГЄГі Г¬ГіГ«ГјГІГЁГЇГ°ГҐГ±Гі
 		brsh keyask3
-		rjmp keyaske;якщо ні, значить натискання не оброблене - на вихід
+		rjmp keyaske;ГїГЄГ№Г® Г­Ві, Г§Г­Г Г·ГЁГІГј Г­Г ГІГЁГ±ГЄГ Г­Г­Гї Г­ГҐ Г®ГЎГ°Г®ГЎГ«ГҐГ­ГҐ - Г­Г  ГўГЁГµВіГ¤
 
-keyask3:cpi reg1, 0;перевірка чи натиснута будь яка клавіша
+keyask3:cpi reg1, 0;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­Г ГІГЁГ±Г­ГіГІГ  ГЎГіГ¤Гј ГїГЄГ  ГЄГ«Г ГўВіГёГ 
 		breq keyask4
-		cpi reg1, 5 ;якщо натиснута, то перевірка чи дана клавіша підпалає під перевірку мультипресу
+		cpi reg1, 5 ;ГїГЄГ№Г® Г­Г ГІГЁГ±Г­ГіГІГ , ГІГ® ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г¤Г Г­Г  ГЄГ«Г ГўВіГёГ  ГЇВіГ¤ГЇГ Г«Г Вє ГЇВіГ¤ ГЇГҐГ°ГҐГўВіГ°ГЄГі Г¬ГіГ«ГјГІГЁГЇГ°ГҐГ±Гі
 		brsh keyask31
 		rjmp keyask5		
 keyask31:lds tmp, keytmp
-		cp reg1, tmp	;перевірка чи натиснута кл відповідає попередньо натиснутій
+		cp reg1, tmp	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ Г­Г ГІГЁГ±Г­ГіГІГ  ГЄГ« ГўВіГ¤ГЇГ®ГўВіГ¤Г Вє ГЇГ®ГЇГҐГ°ГҐГ¤Г­ГјГ® Г­Г ГІГЁГ±Г­ГіГІВіГ©
 		brne keyask5	
-		lds reg2, keymultip ;якщож відповідає, то...
+		lds reg2, keymultip ;ГїГЄГ№Г®Г¦ ГўВіГ¤ГЇГ®ГўВіГ¤Г Вє, ГІГ®...
 		inc reg2
 		cpi reg2, 255
 		brne keyask32
@@ -2424,11 +2425,11 @@ keyask31:lds tmp, keytmp
 keyask32:sts keymultip, reg2
 		rjmp keyaske
 
-keyask5:ldi tmp, 0 ;якщо натиснута не МП клав. то обнулюється лічильник і на вихід
+keyask5:ldi tmp, 0 ;ГїГЄГ№Г® Г­Г ГІГЁГ±Г­ГіГІГ  Г­ГҐ ГЊГЏ ГЄГ«Г Гў. ГІГ® Г®ГЎГ­ГіГ«ГѕВєГІГјГ±Гї Г«ВіГ·ГЁГ«ГјГ­ГЁГЄ Ві Г­Г  ГўГЁГµВіГ¤
 		sts keycountl, tmp
 		rjmp keyaske
 
-keyask4:sts keymultip, reg1;якщо ненатиснута то перевірка 10 разів і обнулення
+keyask4:sts keymultip, reg1;ГїГЄГ№Г® Г­ГҐГ­Г ГІГЁГ±Г­ГіГІГ  ГІГ® ГЇГҐГ°ГҐГўВіГ°ГЄГ  10 Г°Г Г§ВіГў Ві Г®ГЎГ­ГіГ«ГҐГ­Г­Гї
 		lds reg2, keycountl
 		inc reg2
 		cpi reg2, 20
@@ -2439,10 +2440,10 @@ keyask4:sts keymultip, reg1;якщо ненатиснута то перевірка 10 разів і обнулення
 keyask41:sts keycountl, reg2
 		rjmp keyaske
 
-keyask1:cpi reg1, 0	;перевірка чи клавіша не була віддпущена, якщо так очистка лічильника мультипресу
+keyask1:cpi reg1, 0	;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г·ГЁ ГЄГ«Г ГўВіГёГ  Г­ГҐ ГЎГіГ«Г  ГўВіГ¤Г¤ГЇГіГ№ГҐГ­Г , ГїГЄГ№Г® ГІГ ГЄ Г®Г·ГЁГ±ГІГЄГ  Г«ВіГ·ГЁГ«ГјГ­ГЁГЄГ  Г¬ГіГ«ГјГІГЁГЇГ°ГҐГ±Гі
 		brne keyask11
 		sts keymultip, reg1
-keyask11:lds tmp, keytmp ;перевірка на факт натискання клавіші
+keyask11:lds tmp, keytmp ;ГЇГҐГ°ГҐГўВіГ°ГЄГ  Г­Г  ГґГ ГЄГІ Г­Г ГІГЁГ±ГЄГ Г­Г­Гї ГЄГ«Г ГўВіГёВі
 		cp reg1, tmp
 		breq keyask2
 		sts keytmp, reg1
@@ -2487,7 +2488,7 @@ keyaske:pop reg2
 ;4 - mode
 ;5 - up
 ;6 - down
-startkey:ldi tmp, 0	;запуск процесу опитування клавіатури		
+startkey:ldi tmp, 0	;Г§Г ГЇГіГ±ГЄ ГЇГ°Г®Г¶ГҐГ±Гі Г®ГЇГЁГІГіГўГ Г­Г­Гї ГЄГ«Г ГўВіГ ГІГіГ°ГЁ		
 		sts keytmp, tmp
 		sts keycountl, tmp
 		sts keycounth, tmp
@@ -2501,21 +2502,21 @@ startkey:ldi tmp, 0	;запуск процесу опитування клавіатури
 ;lcdbloffint:cbi portb, 7	;Timer3 compare match
 ;		reti
 
-startlcd:cbi portd, 7 ;Ввімкнення/перезапуск дисплея
+startlcd:cbi portd, 7 ;Г‚ГўВіГ¬ГЄГ­ГҐГ­Г­Гї/ГЇГҐГ°ГҐГ§Г ГЇГіГ±ГЄ Г¤ГЁГ±ГЇГ«ГҐГї
 		rcall ini4b
 		rcall lcdbias_startpwm
 		ret
 
-stoplcd:sbi portd, 7 ;Вимкнення дисплея
+stoplcd:sbi portd, 7 ;Г‚ГЁГ¬ГЄГ­ГҐГ­Г­Гї Г¤ГЁГ±ГЇГ«ГҐГї
 		ldi tmp, 0
 		rcall lcdbit
 		cbi portc, 3
 		ret
 
-lcdbias_startpwm:		;запуск шим модулятора регулювання контрасності дисплея
+lcdbias_startpwm:		;Г§Г ГЇГіГ±ГЄ ГёГЁГ¬ Г¬Г®Г¤ГіГ«ГїГІГ®Г°Г  Г°ГҐГЈГіГ«ГѕГўГ Г­Г­Гї ГЄГ®Г­ГІГ°Г Г±Г­Г®Г±ГІВі Г¤ГЁГ±ГЇГ«ГҐГї
 		ldi tmp, 0b01101001
 		out tccr0, tmp
-lcdbiasadj:push zl		;встановлення контрасності дисплея 1...9
+lcdbiasadj:push zl		;ГўГ±ГІГ Г­Г®ГўГ«ГҐГ­Г­Гї ГЄГ®Г­ГІГ°Г Г±Г­Г®Г±ГІВі Г¤ГЁГ±ГЇГ«ГҐГї 1...9
 		push zh
 		lds tmp, lcdcontrast
 		ldi zh, high(2*dblcdcont)
@@ -2532,11 +2533,11 @@ lcdbiasadj:push zl		;встановлення контрасності дисплея 1...9
 dblcdcont:;1 2  3  4  5  6  7  8  9
 .db		0,86,83,79,73,64,56,50,45,40
 
-lcdblon:;ldi tmp, 0b0000001	;ввімкнення підсвітки дисплея			
+lcdblon:;ldi tmp, 0b0000001	;ГўГўВіГ¬ГЄГ­ГҐГ­Г­Гї ГЇВіГ¤Г±ГўВіГІГЄГЁ Г¤ГЁГ±ГЇГ«ГҐГї			
 		;sts tccr3b, tmp		
 		;ldi tmp, 0b0011000
 		;sts etimsk, tmp
-;lcdbladj:push zl		;встановлення яскравості підсвітки 1...10
+;lcdbladj:push zl		;ГўГ±ГІГ Г­Г®ГўГ«ГҐГ­Г­Гї ГїГ±ГЄГ°Г ГўГ®Г±ГІВі ГЇВіГ¤Г±ГўВіГІГЄГЁ 1...10
 ;		push zh
 ;		lds tmp, lcdbllevel
 ;		ldi zh, high(2*dblcdbl)
@@ -2553,7 +2554,7 @@ lcdblon:;ldi tmp, 0b0000001	;ввімкнення підсвітки дисплея
 		sbi portb, 7
 		ret
 				
-lcdbloff:;ldi tmp, 0b0000000	;вимкнення підсвітки дисплея			
+lcdbloff:;ldi tmp, 0b0000000	;ГўГЁГ¬ГЄГ­ГҐГ­Г­Гї ГЇВіГ¤Г±ГўВіГІГЄГЁ Г¤ГЁГ±ГЇГ«ГҐГї			
 		;sts tccr3b, tmp
 		;nop
 		;nop
@@ -2563,7 +2564,7 @@ lcdbloff:;ldi tmp, 0b0000000	;вимкнення підсвітки дисплея
 ;dblcdbl:
 ;.db		0,10,21,34,48,64,84,107,138,181,255,0
 			
-ini4b:	push reg7	;підпрограма ініціалізації дисплея
+ini4b:	push reg7	;ГЇВіГ¤ГЇГ°Г®ГЈГ°Г Г¬Г  ВіГ­ВіГ¶ВіГ Г«ВіГ§Г Г¶ВіВї Г¤ГЁГ±ГЇГ«ГҐГї
 		push reg8
 		ldi tmp, 200
 ini41:	rcall delcd2		
@@ -2643,25 +2644,25 @@ lcdda:	push reg7
 		ret 
 
 lcdbit:	push reg7
-		ror tmp		;Побітове виведення інформації на шину дисплея
+		ror tmp		;ГЏГ®ГЎВіГІГ®ГўГҐ ГўГЁГўГҐГ¤ГҐГ­Г­Гї ВіГ­ГґГ®Г°Г¬Г Г¶ВіВї Г­Г  ГёГЁГ­Гі Г¤ГЁГ±ГЇГ«ГҐГї
 		brcs lcdbit1
 		cbi portc, 1			
 		rjmp lcdbit2
 lcdbit1:sbi portc, 1
-lcdbit2:ror tmp		;біт 2
+lcdbit2:ror tmp		;ГЎВіГІ 2
 		brcs lcdbit21
 		cbi portc, 0
 		rjmp lcdbit3
 lcdbit21:sbi portc, 0
 lcdbit3:lds reg7, portg		
-		ror tmp		;біт 3
+		ror tmp		;ГЎВіГІ 3
 		brcs lcdbit31	
 		clt
 		bld reg7, 1				
 		rjmp lcdbit4
 lcdbit31:set
 		bld reg7, 1	
-lcdbit4:ror tmp		;біт 4
+lcdbit4:ror tmp		;ГЎВіГІ 4
 		brcs lcdbit41
 		clt
 		bld reg7, 0
@@ -2696,5 +2697,5 @@ decd21:	dec reg7
 		brne decd22
 		ret
 
-;.equ	lcdcontrast = $100 ;дана перемінна задається задається в MAIN
+;.equ	lcdcontrast = $100 ;Г¤Г Г­Г  ГЇГҐГ°ГҐГ¬ВіГ­Г­Г  Г§Г Г¤Г ВєГІГјГ±Гї Г§Г Г¤Г ВєГІГјГ±Гї Гў MAIN
 .equ	lcdbllevel = $101
